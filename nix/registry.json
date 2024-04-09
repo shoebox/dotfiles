@@ -1,0 +1,27 @@
+{
+  "flakes": [
+    {
+      "from": {
+        "id": "neovim-nightly",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "nix-community",
+        "repo": "neovim-nightly-overlay",
+        "type": "github"
+      }
+    },
+    {
+      "from": {
+        "id": "androidsdk",
+        "type": "indirect"
+      },
+      "to": {
+        "owner": "tadfisher",
+        "repo": "android-nixpkgs",
+        "type": "github"
+      }
+    }
+  ],
+  "version": 2
+}
