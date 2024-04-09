@@ -1,0 +1,26 @@
+# Golang
+export GOPATH=$HOME/go
+export PATH="$HOME/go/bin:$PATH"
+
+# Node 
+export PATH="$HOME/.npm-packages/bin:$PATH"
+export PATH="$HOME/.node/module/bin:$PATH"
+
+# Ruby
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+export GEM_HOME=$HOME/.gem
+export PATH=$GEM_HOME/bin:$PATH
+
+# direnv support
+eval "$(direnv hook zsh)"
+
+# Jump support
+if [ -x "$(command -v "jump")" ]; then
+    eval "$(jump shell zsh)"
+else
+    printf  "Jump is not installed."
+fi
+
+# GPG pinentry https://github.com/Homebrew/homebrew-core/issues/14737#issuecomment-309848851
+GPG_TTY=$(tty)
+export GPG_TTY
