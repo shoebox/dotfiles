@@ -2,38 +2,33 @@ local lang = {}
 local p = require("packer")
 
 function lang.packer()
-		  p.use({
-		      "vim-scripts/haproxy",
+	p.use({
+		"vim-scripts/haproxy",
 		filetype = "haproxy",
-		  })
-
-		--   p.use({
-		--       "Joorem/vim-haproxy",
-		-- filetype = "haproxy",
-		--   })
+	})
 
 	p.use({
 		"mfussenegger/nvim-dap",
 		requires = { "nvim-neotest/nvim-nio", "rcarriga/nvim-dap-ui" },
 		config = function()
-		    local function get_arguments()
-                local co = coroutine.running()
-                if co then
-                    return coroutine.create(function()
-                    local args = {}
-                    vim.ui.input({ prompt = "Args: " }, function(input)
-                        args = vim.split(input or "", " ")
-                    end)
-                    coroutine.resume(co, args)
-                    end)
-                else
-                    local args = {}
-                    vim.ui.input({ prompt = "Args: " }, function(input)
-                    args = vim.split(input or "", " ")
-                    end)
-                    return args
-                end
-            end
+			local function get_arguments()
+				local co = coroutine.running()
+				if co then
+					return coroutine.create(function()
+						local args = {}
+						vim.ui.input({ prompt = "Args: " }, function(input)
+							args = vim.split(input or "", " ")
+						end)
+						coroutine.resume(co, args)
+					end)
+				else
+					local args = {}
+					vim.ui.input({ prompt = "Args: " }, function(input)
+						args = vim.split(input or "", " ")
+					end)
+					return args
+				end
+			end
 
 			local dap = require("dap")
 			dap.adapters.delve = {
@@ -55,10 +50,10 @@ function lang.packer()
 				},
 				{
 					type = "delve",
-                    name = "Debug (Arguments)",
+					name = "Debug (Arguments)",
 					request = "launch",
 					program = "${file}",
-                    args = get_arguments,
+					args = get_arguments,
 				},
 				{
 					type = "delve",
@@ -75,7 +70,7 @@ function lang.packer()
 					program = "./${relativeFileDirname}",
 				},
 			}
-            require("dapui").setup()
+			require("dapui").setup()
 		end,
 	})
 
@@ -111,9 +106,9 @@ function lang.packer()
 				lsp_diag_update_in_insert = true,
 				lsp_document_formatting = true,
 				diagnostic = {
-				    virtual_text = { prefix = '🐹' },
-				    signs = true,
-				    update_in_insert = false,
+					virtual_text = { prefix = "🐹" },
+					signs = true,
+					update_in_insert = false,
 				},
 			})
 		end,
@@ -123,44 +118,44 @@ function lang.packer()
 	})
 
 	p.use({
-	    "nvim-treesitter/nvim-treesitter-refactor",
-	    config = function()
-	        require('nvim-treesitter.configs').setup {
-                refactor = {
-                    highlight_definitions = {
-                        enable = true,
-                        -- Set to false if you have an `updatetime` of ~100.
-                        clear_on_cursor_move = true,
-                    },
+		"nvim-treesitter/nvim-treesitter-refactor",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				refactor = {
+					highlight_definitions = {
+						enable = true,
+						-- Set to false if you have an `updatetime` of ~100.
+						clear_on_cursor_move = true,
+					},
 
-                    smart_rename = {
-                        enable = true,
-                        -- Assign keymaps to false to disable them, e.g. `smart_rename = false`.
-                        keymaps = {
-                            smart_rename = "grr",
-                        },
-                    },
-                    navigation = {
-                        enable = true,
-                        goto_definition = "gnd",
-                        list_definitions = "gnD",
-                        list_definitions_toc = "gO",
-                        goto_next_usage = "<a-*>",
-                        goto_previous_usage = "<a-#>",
-                    },
-                }
-            }
-	    end,
+					smart_rename = {
+						enable = true,
+						-- Assign keymaps to false to disable them, e.g. `smart_rename = false`.
+						keymaps = {
+							smart_rename = "grr",
+						},
+					},
+					navigation = {
+						enable = true,
+						goto_definition = "gnd",
+						list_definitions = "gnD",
+						list_definitions_toc = "gO",
+						goto_next_usage = "<a-*>",
+						goto_previous_usage = "<a-#>",
+					},
+				},
+			})
+		end,
 	})
 
 	p.use({
-	    "sbdchd/neoformat",
-	    cmd = { "Neoformat" },
-	    config = function()
-	        vim.cmd([[
+		"sbdchd/neoformat",
+		cmd = { "Neoformat" },
+		config = function()
+			vim.cmd([[
 	            let g:neoformat_only_msg_on_error = 1
             ]])
-	    end,
+		end,
 	})
 
 	p.use({
@@ -171,24 +166,24 @@ function lang.packer()
 			"nvim-neotest/neotest-go",
 		},
 		config = function()
-            -- get neotest namespace (api call creates or returns namespace)
-            local neotest_ns = vim.api.nvim_create_namespace("neotest")
-            vim.diagnostic.config({
-            virtual_text = {
-                format = function(diagnostic)
-                local message =
-                    diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
-                return message
-                end,
-            },
-            }, neotest_ns)
-            require("neotest").setup({
-                -- your neotest config here
-                adapters = {
-                    require("neotest-go"),
-                },
-            })
-        end,
+			-- get neotest namespace (api call creates or returns namespace)
+			local neotest_ns = vim.api.nvim_create_namespace("neotest")
+			vim.diagnostic.config({
+				virtual_text = {
+					format = function(diagnostic)
+						local message =
+							diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+						return message
+					end,
+				},
+			}, neotest_ns)
+			require("neotest").setup({
+				-- your neotest config here
+				adapters = {
+					require("neotest-go"),
+				},
+			})
+		end,
 		-- config = function()
 		-- 	require("neotest").setup({
 		-- 		adapters = {
@@ -223,8 +218,8 @@ function lang.packer()
 	})
 
 	p.use({
-	    "terrastruct/d2-vim",
-	    ft = {'d2'},
+		"terrastruct/d2-vim",
+		ft = { "d2" },
 	})
 end
 

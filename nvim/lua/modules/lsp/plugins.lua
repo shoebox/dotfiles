@@ -3,15 +3,7 @@ local lsp = {}
 local p = require("packer")
 
 function lsp.packer()
-    -- p.use({ "pearofducks/ansible-vim" })
-    p.use({ "mfussenegger/nvim-ansible" })
-
-    -- p.use({
-    --     "folke/neodev.nvim",
-    --     config = function()
-    --         require("neodev").setup({})
-    --     end,
-    -- })
+	p.use({ "mfussenegger/nvim-ansible" })
 
 	p.use({
 		"ray-x/lsp_signature.nvim",
@@ -34,31 +26,31 @@ function lsp.packer()
 		"neovim/nvim-lspconfig",
 		event = "BufReadPre",
 		config = function()
-            local servers = {
-                -- "ansiblels",
-                "bashls",
-                "cucumber_language_server",
-                "gopls",
-                "rnix",
-                "terraform_lsp",
-                "terraformls",
-                "tsserver",
-                "yamlls",
-            }
+			local servers = {
+				-- "ansiblels",
+				"bashls",
+				"cucumber_language_server",
+				"gopls",
+				"rnix",
+				"terraform_lsp",
+				"terraformls",
+				"tsserver",
+				"yamlls",
+			}
 
-            local lspcfg = require("lspconfig")
-            local sign = require("lsp_signature")
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local lspcfg = require("lspconfig")
+			local sign = require("lsp_signature")
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-            for _, def in pairs(servers) do
-                local cfg = lspcfg[def]
-                cfg.setup({
-                    capabilities = capabilities,
-                })
+			for _, def in pairs(servers) do
+				local cfg = lspcfg[def]
+				cfg.setup({
+					capabilities = capabilities,
+				})
 
-                sign.setup(cfg)
-            end
-	    end,
+				sign.setup(cfg)
+			end
+		end,
 		requires = {
 			"hrsh7th/cmp-nvim-lsp",
 		},
@@ -68,92 +60,79 @@ function lsp.packer()
 	})
 
 	p.use({
-		"mfussenegger/nvim-lint",
+		"nvimtools/none-ls.nvim",
 		config = function()
-            local lint = require('lint')
-            local configFile = vim.fn.getcwd().."/.golangci.yml"
+			local null_ls = require("null-ls")
 
-            lint.linters.golangcilint.args = {
-                'run',
-                '--out-format',
-                'json',
-                '--config',
-                configFile,
-                function()
-                    return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
-                end
-            }
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.completion.spell,
 
-            lint.linters_by_ft = {
-                asciidoc = { "vale" },
-                dockerfile = { "hadolint" },
-                markdown = { "vale" },
-                go = { "golangcilint" },
-                lua = { "luacheck" },
-                nix = { "nix" },
-                sh = { "shellcheck" },
-                yaml = { "yamllint" },
-                ["yaml.ansible"] = { "ansible_lint", "yamllint" },
-            }
+					-- diagnostics
+					null_ls.builtins.diagnostics.ansiblelint,
+					null_ls.builtins.diagnostics.commitlint,
+					null_ls.builtins.diagnostics.deadnix,
+					null_ls.builtins.diagnostics.golangci_lint,
+					null_ls.builtins.diagnostics.hadolint,
+					null_ls.builtins.diagnostics.statix,
+					null_ls.builtins.diagnostics.vale,
+					null_ls.builtins.diagnostics.yamllint,
+					null_ls.builtins.diagnostics.zsh,
 
-            -- local golangcilint = require('lint').linters.golangcilint
-            -- golangcilint.args = {
-            --     'run',
-            --     '--out-format',
-            --     'json',
-            --     '--config',
-            --     vim.loop.cwd() .. "/.golangci.yml",
-            --     function()
-            --         return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":h")
-            --     end
-            -- }
-	    end,
+					-- Formatting
+					null_ls.builtins.formatting.alejandra,
+					null_ls.builtins.formatting.nixfmt,
+					null_ls.builtins.formatting.nixpkgs_fmt,
+					null_ls.builtins.formatting.prettier,
+					null_ls.builtins.formatting.stylua,
+				},
+			})
+		end,
 	})
 
 	p.use({
 		"hrsh7th/nvim-cmp",
 		config = function()
-            local cmp = require("cmp")
-            local sources = {
-                { name = "nvim_lsp" },
-                { name = "treesitter", keyword_length = 2 },
-                { name = "look", keyword_length = 2 },
-                { name = "path" },
-            }
-            cmp.setup({
-                completion = {
-                    autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
-                    completeopt = "menu,menuone,noselect",
-                },
-                formatting = {
-                    format = function(entry, vim_item)
-                        vim_item.menu = ({
-                            buffer = " ﬘",
-                            nvim_lsp = " ",
-                            luasnip = " 🐍",
-                            treesitter = " ",
-                            nvim_lua = " ",
-                            spell = " 暈",
-                            emoji = "ﲃ",
-                            copilot = "🤖",
-                            look = "﬜",
-                        })[entry.source.name]
-                        return vim_item
-                    end,
-                },
-                mapping = {
-                    ["<up>"] = cmp.mapping.select_prev_item(),
-                    ["<down>"] = cmp.mapping.select_next_item(),
-                    ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-                },
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body)
-                    end,
-                },
-                sources = sources,
-            })
-	    end,
+			local cmp = require("cmp")
+			local sources = {
+				{ name = "nvim_lsp" },
+				{ name = "treesitter", keyword_length = 2 },
+				{ name = "look", keyword_length = 2 },
+				{ name = "path" },
+			}
+			cmp.setup({
+				completion = {
+					autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
+					completeopt = "menu,menuone,noselect",
+				},
+				formatting = {
+					format = function(entry, vim_item)
+						vim_item.menu = ({
+							buffer = " ﬘",
+							nvim_lsp = " ",
+							luasnip = " 🐍",
+							treesitter = " ",
+							nvim_lua = " ",
+							spell = " 暈",
+							emoji = "ﲃ",
+							look = "﬜",
+						})[entry.source.name]
+						return vim_item
+					end,
+				},
+				mapping = {
+					["<up>"] = cmp.mapping.select_prev_item(),
+					["<down>"] = cmp.mapping.select_next_item(),
+					["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+				},
+				snippet = {
+					expand = function(args)
+						require("luasnip").lsp_expand(args.body)
+					end,
+				},
+				sources = sources,
+			})
+		end,
 		requires = {
 			"neovim/nvim-lspconfig",
 			"hrsh7th/cmp-nvim-lsp",
