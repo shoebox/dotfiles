@@ -65,6 +65,7 @@ function lsp.packer()
 			local null_ls = require("null-ls")
 
 			null_ls.setup({
+			    debug = true,
 				sources = {
 					null_ls.builtins.completion.spell,
 
@@ -80,12 +81,36 @@ function lsp.packer()
 					null_ls.builtins.diagnostics.zsh,
 
 					-- Formatting
+					-- Formatting/nix
 					null_ls.builtins.formatting.alejandra,
 					null_ls.builtins.formatting.nixfmt,
 					null_ls.builtins.formatting.nixpkgs_fmt,
-					null_ls.builtins.formatting.prettier,
+					-- Formatting/golang
+					null_ls.builtins.formatting.gofmt,
+					null_ls.builtins.formatting.gofumpt,
+					null_ls.builtins.formatting.goimports,
+					null_ls.builtins.formatting.goimports_reviser,
+					null_ls.builtins.formatting.golines,
+					-- Formatting/lua
+					null_ls.builtins.formatting.prettierd,
 					null_ls.builtins.formatting.stylua,
 				},
+			})
+
+			local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+			require("null-ls").setup({
+				on_attach = function(client, bufnr)
+					if client.supports_method("textDocument/formatting") then
+						vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = augroup,
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.buf.format({ async = false })
+							end,
+						})
+					end
+				end,
 			})
 		end,
 	})
