@@ -16,19 +16,6 @@ local plugin_telescope = {
 	["n|<C-Q>"] = map_cr("lua require('telescope.builtin').quickfix()"):with_noremap():with_silent(),
 }
 
-local plugin_lsp = {
-	["n|<leader>gD"] = map_cr("lua vim.lsp.buf.declaration()"):with_noremap():with_silent(),
-	["n|<leader>gd"] = map_cr("lua vim.lsp.buf.definition()"):with_noremap():with_silent(),
-	["n|K"] = map_cr("lua vim.lsp.buf.hover()"):with_noremap():with_silent(),
-	["n|<leader>gi"] = map_cr("lua vim.lsp.buf.implementation()"):with_noremap():with_silent(),
-	["n|<leader>D"] = map_cr("lua vim.lsp.buf.implementation()"):with_noremap():with_silent(),
-	["n|<leader>rn"] = map_cr("lua vim.lsp.buf.rename()"):with_noremap():with_silent(),
-	["n|<leader>D"] = map_cr("lua vim.lsp.buf.type_definition()"):with_noremap():with_silent(),
-	["n|<leader>ca"] = map_cr("lua vim.lsp.buf.code_action()"):with_noremap():with_silent(),
-	["n|<leader>gr"] = map_cr("lua vim.lsp.buf.references()"):with_noremap():with_silent(),
-	["n|<leader>f"] = map_cr("lua vim.lsp.buf.format { async = true }"):with_noremap():with_silent(),
-}
-
 local plugin_nvimtree = {
 	["n|<space>n"] = map_cr("NvimTreeToggle"):with_noremap():with_silent(),
 }
@@ -169,24 +156,36 @@ local plugin_hop = function()
 end
 
 local lsp_diagnostics = function()
-    local opts = { noremap=true, silent=true }
-    vim.keymap.set("n", "<leader>dl", '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-    vim.keymap.set("n", "<leader>dn", '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-    vim.keymap.set("n", "<leader>dp", '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-    vim.keymap.set("n", "<leader>dh", '<cmd>lua vim.diagnostic.hide()<CR>', opts)
-    vim.keymap.set("n", "<leader>ds", '<cmd>lua vim.diagnostic.show()<CR>', opts)
+	local opts = { noremap = true, silent = true }
+	vim.keymap.set("n", "<leader>dl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+	vim.keymap.set("n", "<leader>dn", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+	vim.keymap.set("n", "<leader>dp", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+	vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.hide()<CR>", opts)
+	vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.show()<CR>", opts)
 end
 
 local plugin_trouble = function()
-    vim.keymap.set("n", "<leader>xx", function() require("trouble").open() end)
-    vim.keymap.set("n", "<leader>xw", function() require("trouble").open("workspace_diagnostics") end)
-    vim.keymap.set("n", "<leader>xd", function() require("trouble").open("document_diagnostics") end)
-    vim.keymap.set("n", "<leader>xq", function() require("trouble").open("quickfix") end)
-    vim.keymap.set("n", "<leader>xl", function() require("trouble").open("loclist") end)
-    vim.keymap.set("n", "gR", function() require("trouble").open("lsp_references") end)
+	vim.keymap.set("n", "<leader>xx", function()
+		require("trouble").open()
+	end)
+	vim.keymap.set("n", "<leader>xw", function()
+		require("trouble").open("workspace_diagnostics")
+	end)
+	vim.keymap.set("n", "<leader>xd", function()
+		require("trouble").open("document_diagnostics")
+	end)
+	vim.keymap.set("n", "<leader>xq", function()
+		require("trouble").open("quickfix")
+	end)
+	vim.keymap.set("n", "<leader>xl", function()
+		require("trouble").open("loclist")
+	end)
+	vim.keymap.set("n", "gR", function()
+		require("trouble").open("lsp_references")
+	end)
 end
 
-vim.keymap.set("n", "<-s", '<cmd>w<CR')
+vim.keymap.set("n", "<-s", "<cmd>w<CR")
 
 local plugin_lazygit = {
 	["n|<leader>gg"] = map_cr("LazyGit"):with_noremap():with_silent(),
@@ -198,12 +197,12 @@ local plugin_vim_easyalign = {
 }
 
 local nb = function()
-    local opts = { noremap=true, silent=false }
-    vim.keymap.set("n", "<leader>wt", ":e `='~/.nb/home/Journal/' . expand(strftime('%Y-%m-%d')) . '.adoc'` <CR>", opts)
+	local opts = { noremap = true, silent = false }
+	vim.keymap.set("n", "<leader>wt", ":e `='~/.nb/home/Journal/' . expand(strftime('%Y-%m-%d')) . '.adoc'` <CR>", opts)
 end
 
 local gen = function()
-    vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
+	vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
 end
 
 leader_map()
@@ -212,13 +211,11 @@ bind.nvim_load_mapping(global_git)
 bind.nvim_load_mapping(global_nav)
 bind.nvim_load_mapping(global_tabs)
 bind.nvim_load_mapping(plugin_floatterm)
-bind.nvim_load_mapping(plugin_lsp)
 bind.nvim_load_mapping(plugin_nvimtree)
 bind.nvim_load_mapping(plugin_overseer)
 bind.nvim_load_mapping(plugin_telescope)
 bind.nvim_load_mapping(plugin_lazygit)
 bind.nvim_load_mapping(plugin_vim_easyalign)
-
 
 plugin_neotest()
 plugin_hop()
@@ -229,5 +226,6 @@ lsp_diagnostics()
 nb()
 gen()
 
-vim.keymap.set("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end)
-
+vim.keymap.set("x", "<leader>re", function()
+	require("refactoring").refactor("Extract Function")
+end)
