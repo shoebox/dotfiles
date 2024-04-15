@@ -2,34 +2,40 @@ local tools = {}
 local p = require("packer")
 
 function tools.packer()
-    p.use({
-        "ThePrimeagen/refactoring.nvim",
-        requires = {
-            {"nvim-lua/plenary.nvim"},
-            {"nvim-treesitter/nvim-treesitter"}
-        },
-        config = function()
-            require("refactoring").setup()
-        end,
-    })
+	p.use({
+		"ThePrimeagen/refactoring.nvim",
+		requires = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "nvim-treesitter/nvim-treesitter" },
+		},
+		config = function()
+			require("refactoring").setup()
+		end,
+	})
 
 	p.use({ "nvim-lua/plenary.nvim" })
 
 	p.use({
-	    "David-Kunz/gen.nvim",
-	    cmd = { "Gen" },
+		"David-Kunz/gen.nvim",
+		cmd = { "Gen" },
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"stevearc/dressing.nvim",
 		},
 		config = function()
-		    require("gen").setup({
-		        model = "mistral",
-		        display_mode = "split",
-		        no_auto_close = true,
-		        replace = false,
-		        show_model = true,
-		    })
+			require("gen").setup({
+				model = "mistral",
+				display_mode = "split",
+				no_auto_close = true,
+				replace = false,
+				show_model = true,
+			})
+
+			require("gen").prompts["Advanced code review"] = {
+				prompt = "Act as a top-notch Golang developer. Review this code, provide suggestions for improvement, coding best practices (SOLID and DRY), improve readability, and maintainability. \no any code smells and anti-patterns. If the file does not have any code or does not need any changes, say 'No changes needed'. Only ouput the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+				replace = true,
+				extract = "```$filetype\n(.-)```",
+			}
 		end,
 	})
 
@@ -79,7 +85,6 @@ function tools.packer()
 
 	p.use({
 		"folke/trouble.nvim",
-		-- cmd = { "Trouble", "TroubleToggle" },
 		config = function()
 			require("trouble").setup({
 				mode = "document_diagnostics",
@@ -177,13 +182,19 @@ function tools.packer()
 		requires = { "nvim-treesitter" },
 		config = function()
 			require("treesj").setup({
-			    keys = { '<space>m', '<space>j', '<space>s' },
+				keys = { "<space>m", "<space>j", "<space>s" },
 			})
 
-            local opts = { noremap=true, silent=true }
-            vim.keymap.set("n", "<leader>zt", function() require('treesj').toggle() end, opts)
-            vim.keymap.set("n", "<leader>zs", function() require('treesj').split() end, opts)
-            vim.keymap.set("n", "<leader>zj", function() require('treesj').join() end, opts)
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<leader>zt", function()
+				require("treesj").toggle()
+			end, opts)
+			vim.keymap.set("n", "<leader>zs", function()
+				require("treesj").split()
+			end, opts)
+			vim.keymap.set("n", "<leader>zj", function()
+				require("treesj").join()
+			end, opts)
 		end,
 	})
 
@@ -221,8 +232,7 @@ function tools.packer()
 	p.use({
 		"kdheepak/lazygit.nvim",
 		cmd = "LazyGit",
-        config = function()
-        end,
+		config = function() end,
 	})
 
 	p.use({
