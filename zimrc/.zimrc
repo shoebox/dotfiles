@@ -1,0 +1,59 @@
+# Modules
+# --------------------------------------------------------------------------------------------------
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
+zmodule spaceship-prompt/spaceship-prompt --name spaceship --no-submodules
+
+# Prompt
+# --------------------------------------------------------------------------------------------------
+
+# Sets sane Zsh built-in environment options.
+zmodule environment
+# Provides handy git aliases and functions.
+zmodule git
+# Exposes git repository status information to prompts.
+zmodule git-info
+# Applies correct bindkeys for input events.
+zmodule input
+# Shown when there is no command and user presses ENTER.
+zmodule magic-enter
+# Sets a custom terminal title.
+zmodule termtitle
+# Utility aliases and functions. Adds colour to ls, grep and less.
+zmodule utility
+# Exposes to prompts how long the last command took to execute.
+zmodule duration-info
+
+zmodule catppuccin/zsh-syntax-highlighting \
+    --name catppuccin_mocha-zsh-syntax-highlighting \
+    --source themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+
+# Completion 
+# --------------------------------------------------------------------------------------------------
+
+# Enables and configures smart and extensive tab completion.
+# Additional completion definitions for Zsh.
+zmodule zsh-users/zsh-completions --fpath src
+
+# zmodule zx2c4/password-store \
+#     --name password-store-completion \
+#     --source src/completion/pass.zsh-completion
+
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after all modules that add completion definitions.
+zmodule completion
+
+zmodule spaceship-prompt/spaceship-vi-mode
+
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+zmodule zsh-users/zsh-syntax-highlighting
+
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-history-substring-search
+
+# Fish-like autosuggestions for Zsh.
+zmodule zsh-users/zsh-autosuggestions
+
+zmodule zx2c4/password-store --fpath src/completion
