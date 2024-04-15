@@ -1,9 +1,7 @@
 local ui = {}
-local conf = require("modules.ui.config")
 local p = require("packer")
 
 function ui.packer()
-	local cfgui = require("modules.ui.config")
 	p.use({
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
@@ -16,12 +14,12 @@ function ui.packer()
 	})
 
 	p.use({
-	    "m4xshen/smartcolumn.nvim",
-	    config = function()
-	        require("smartcolumn").setup({
-	            colorcolumn = "100",
-	        })
-	    end,
+		"m4xshen/smartcolumn.nvim",
+		config = function()
+			require("smartcolumn").setup({
+				colorcolumn = "100",
+			})
+		end,
 	})
 
 	p.use({
@@ -64,43 +62,111 @@ function ui.packer()
 		"voldikss/vim-floaterm",
 		cmd = { "FloatermToggle", "FloatermNew" },
 		setup = function()
-	        vim.g.floaterm_shell = "zsh"
+			vim.g.floaterm_shell = "zsh"
 		end,
 	})
 
-	p.use({ "folke/which-key.nvim", cmd = { "WhichKey" }, config = cfgui.whichkey })
+	p.use({
+		"folke/which-key.nvim",
+		cmd = { "WhichKey" },
+		config = function()
+			require("which-key").setup({})
+		end,
+	})
 
 	p.use({
 		"nvim-lualine/lualine.nvim",
-		config = cfgui.lualine,
+		config = function()
+			require("lualine").setup({
+				extensions = { "quickfix", "overseer" },
+				sections = {
+					lualine_a = { "mode" },
+					lualine_b = {
+						"require'lsp-status'.status()",
+					},
+					lualine_c = { "branch", "filename", "diff" },
+					lualine_x = { "fileformat", "filetype" },
+					lualine_y = { "overseer", "diff" },
+					-- lualine_z = { "location", selected_line },
+				},
+				options = {
+					globalstatus = true,
+					theme = "tokyonight",
+				},
+			})
+		end,
 		event = "VimEnter",
 		requires = { "stevearc/overseer.nvim" },
 	})
 
 	p.use({
 		"kosayoda/nvim-lightbulb",
-		config = cfgui.lightbulb,
+		config = function()
+			require("nvim-lightbulb").setup({})
+		end,
 	})
 
-    p.use({
-        "loctvl842/monokai-pro.nvim",
-        config = function()
-            require("monokai-pro").setup()
-        end
-    })
+	p.use({
+		"loctvl842/monokai-pro.nvim",
+		config = function()
+			require("monokai-pro").setup()
+		end,
+	})
 
 	p.use({ "catppuccin/nvim" })
-	p.use({ "folke/tokyonight.nvim" })
+
+	p.use({
+		"folke/tokyonight.nvim",
+		config = function()
+			require("tokyonight").setup({
+				dim_inactive = true,
+				style = "storm",
+				styles = {
+					sidebars = "dark",
+					floats = "dark",
+				},
+				terminal_colors = true,
+				transparent = true,
+			})
+
+			vim.cmd.colorscheme("tokyonight")
+		end,
+	})
+
 	p.use({
 		"akinsho/bufferline.nvim",
-		config = cfgui.bufferline_nvim,
+		config = function()
+			require("bufferline").setup({
+				options = {
+					-- 	always_show_bufferline = true,
+					-- 	diagnostics = "nvim_lsp",
+					mode = "tabs",
+					numbers = "ordinal",
+					offsets = {
+						{
+							filetype = "NvimTree",
+							text = "File Explorer",
+							text_align = "left",
+						},
+					},
+					separator = false,
+					-- separator_style = "slant",
+					show_buffer_close_icons = false,
+					-- 	show_buffer_icons = false,
+					-- 	show_duplicate_prefix = false,
+					themable = true,
+				},
+			})
+		end,
 	})
+
 	p.use({
 		"rcarriga/nvim-notify",
 		config = function()
 			require("notify").setup({})
 		end,
 	})
+
 	p.use({
 		"HampusHauffman/block.nvim",
 		config = function()
@@ -111,11 +177,6 @@ function ui.packer()
 		end,
 		cmd = { "BlockOn", "BlockOff", "Block" },
 	})
-
-	-- p.use({
-	-- 	"folke/noice.nvim",
-	-- 	event = "VimEnter",
-	-- })
 end
 
 return ui
