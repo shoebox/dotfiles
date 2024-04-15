@@ -112,9 +112,7 @@ function lang.packer()
 				},
 			})
 		end,
-		event = { "CmdlineEnter" },
 		ft = { "go", "gomod" },
-		build = ':lua require("go.install").update_all_sync()',
 	})
 
 	p.use({
@@ -122,11 +120,11 @@ function lang.packer()
 		config = function()
 			require("nvim-treesitter.configs").setup({
 				refactor = {
-					highlight_definitions = {
-						enable = true,
-						-- Set to false if you have an `updatetime` of ~100.
-						clear_on_cursor_move = true,
-					},
+					-- highlight_definitions = {
+					-- 	enable = true,
+					-- 	-- Set to false if you have an `updatetime` of ~100.
+					-- 	clear_on_cursor_move = true,
+					-- },
 
 					smart_rename = {
 						enable = true,
