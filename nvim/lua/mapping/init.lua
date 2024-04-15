@@ -118,26 +118,6 @@ local plugin_overseer = {
 	["n|<leader>ot"] = map_cu("OverseerToggle bottom"),
 }
 
-local plugin_neotest = function()
-	local nt = require("neotest")
-
-	vim.keymap.set("", "<leader>rtf", function()
-		nt.run.run()
-	end, { remap = false })
-
-	vim.keymap.set("", "<leader>rtd", function()
-		nt.run.run({ strategy = "dap" })
-	end, { remap = false })
-
-	vim.keymap.set("", "<leader>rts", function()
-		nt.summary.toggle()
-	end, { remap = false })
-
-	vim.keymap.set("", "<leader>rtc", function()
-		nt.run.run(vim.fn.expand("%"))
-	end, { remap = false })
-end
-
 local plugin_hop = function()
 	local hop = require("hop")
 	local directions = require("hop.hint").HintDirection
@@ -162,27 +142,6 @@ local lsp_diagnostics = function()
 	vim.keymap.set("n", "<leader>dp", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
 	vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.hide()<CR>", opts)
 	vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.show()<CR>", opts)
-end
-
-local plugin_trouble = function()
-	vim.keymap.set("n", "<leader>xx", function()
-		require("trouble").open()
-	end)
-	vim.keymap.set("n", "<leader>xw", function()
-		require("trouble").open("workspace_diagnostics")
-	end)
-	vim.keymap.set("n", "<leader>xd", function()
-		require("trouble").open("document_diagnostics")
-	end)
-	vim.keymap.set("n", "<leader>xq", function()
-		require("trouble").open("quickfix")
-	end)
-	vim.keymap.set("n", "<leader>xl", function()
-		require("trouble").open("loclist")
-	end)
-	vim.keymap.set("n", "gR", function()
-		require("trouble").open("lsp_references")
-	end)
 end
 
 vim.keymap.set("n", "<-s", "<cmd>w<CR")
@@ -217,10 +176,8 @@ bind.nvim_load_mapping(plugin_telescope)
 bind.nvim_load_mapping(plugin_lazygit)
 bind.nvim_load_mapping(plugin_vim_easyalign)
 
-plugin_neotest()
 plugin_hop()
 plugin_dap()
-plugin_trouble()
 lsp_diagnostics()
 
 nb()

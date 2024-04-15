@@ -86,15 +86,20 @@ function tools.packer()
 	p.use({
 		"folke/trouble.nvim",
 		config = function()
-			require("trouble").setup({
+			local trouble = require("trouble")
+
+			trouble.setup({
 				mode = "document_diagnostics",
-				-- auto_open = true,
 				auto_close = true,
 				height = 15,
 				multiline = true,
 				indent_lines = true,
 				use_diagnostic_signs = true,
 			})
+
+			vim.keymap.set("n", "<leader>tt", function()
+				trouble.toggle()
+			end)
 		end,
 	})
 
@@ -110,7 +115,7 @@ function tools.packer()
 	-- 		require("octo").setup()
 	-- 	end,
 	-- })
-	--
+
 	p.use({
 		"sindrets/diffview.nvim",
 		requires = "nvim-lua/plenary.nvim",

@@ -160,37 +160,34 @@ function lang.packer()
 		"nvim-neotest/neotest",
 		requires = {
 			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
 			"nvim-neotest/neotest-go",
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-neotest/nvim-nio",
 		},
 		config = function()
-			-- get neotest namespace (api call creates or returns namespace)
-			local neotest_ns = vim.api.nvim_create_namespace("neotest")
-			vim.diagnostic.config({
-				virtual_text = {
-					format = function(diagnostic)
-						local message =
-							diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
-						return message
-					end,
-				},
-			}, neotest_ns)
-			require("neotest").setup({
-				-- your neotest config here
+			local neotest = require("neotest")
+			neotest.setup({
 				adapters = {
 					require("neotest-go"),
 				},
 			})
+
+			vim.keymap.set("", "<leader>rtf", function()
+				neotest.run.run()
+			end, { remap = false })
+
+			vim.keymap.set("", "<leader>rtd", function()
+				neotest.run.run({ strategy = "dap" })
+			end, { remap = false })
+
+			vim.keymap.set("", "<leader>rts", function()
+				neotest.summary.toggle()
+			end, { remap = false })
+
+			vim.keymap.set("", "<leader>rtc", function()
+				neotest.run.run(vim.fn.expand("%"))
+			end, { remap = false })
 		end,
-		-- config = function()
-		-- 	require("neotest").setup({
-		-- 		adapters = {
-		-- 			require("neotest-go")({
-		-- 				args = { "-count=1", "-timeout=10s" },
-		-- 			}),
-		-- 		},
-		-- 	})
-		-- end,
 	})
 
 	p.use({

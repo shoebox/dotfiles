@@ -169,17 +169,6 @@ function ui.packer()
 			require("notify").setup({})
 		end,
 	})
-
-	p.use({
-		"HampusHauffman/block.nvim",
-		config = function()
-			require("block").setup({
-				percent = 1.1,
-				depth = 6,
-			})
-		end,
-		cmd = { "BlockOn", "BlockOff", "Block" },
-	})
 end
 
 return ui
