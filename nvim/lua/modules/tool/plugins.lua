@@ -11,6 +11,11 @@ function tools.packer()
 		config = function()
 			require("refactoring").setup()
 		end,
+		setup = function()
+			vim.keymap.set("x", "<leader>re", function()
+				require("refactoring").refactor("Extract Function")
+			end)
+		end,
 	})
 
 	p.use({ "nvim-lua/plenary.nvim" })
@@ -24,7 +29,7 @@ function tools.packer()
 		},
 		config = function()
 			require("gen").setup({
-				model = "mistral",
+				model = "deepseek-coder:6.7b",
 				display_mode = "split",
 				no_auto_close = true,
 				replace = false,
@@ -36,6 +41,132 @@ function tools.packer()
 				replace = true,
 				extract = "```$filetype\n(.-)```",
 			}
+		end,
+		setup = function()
+			vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
+		end,
+	})
+
+	p.use({
+		"echasnovski/mini.sessions",
+		branch = "stable",
+		config = function()
+			require("mini.sessions").setup({
+				-- Whether to read latest session if Neovim opened without file arguments
+				autoread = true,
+
+				-- Whether to write current session before quitting Neovim
+				autowrite = true,
+			})
+		end,
+	})
+
+	p.use({
+		"tpope/vim-fugitive",
+		cmd = { "G", "Git", "GCommit", "Gpull", "Gpush" },
+	})
+
+	p.use({
+		"folke/trouble.nvim",
+		config = function()
+			local trouble = require("trouble")
+
+			trouble.setup({
+				mode = "document_diagnostics",
+				auto_close = true,
+				height = 15,
+				multiline = true,
+				indent_lines = true,
+				use_diagnostic_signs = true,
+			})
+
+			vim.keymap.set("n", "<leader>tt", function()
+				trouble.toggle()
+			end)
+		end,
+	})
+
+	p.use({
+		"sindrets/diffview.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		cmd = { "DiffviewFileHistory", "DiffviewOpen" },
+	})
+
+	p.use({
+		"phaazon/hop.nvim",
+		branch = "v2",
+		config = function()
+			require("hop").setup()
+		end,
+	})
+
+	p.use({
+		"akinsho/toggleterm.nvim",
+		config = function()
+			require("toggleterm").setup({
+				size = 20,
+			})
+		end,
+		cmd = { "ToggleTerm" },
+	})
+
+	p.use({
+		"Wansmer/treesj",
+		requires = { "nvim-treesitter" },
+		config = function()
+			require("treesj").setup({
+				keys = { "<space>m", "<space>j", "<space>s" },
+			})
+
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<leader>zt", function()
+				require("treesj").toggle()
+			end, opts)
+			vim.keymap.set("n", "<leader>zs", function()
+				require("treesj").split()
+			end, opts)
+			vim.keymap.set("n", "<leader>zj", function()
+				require("treesj").join()
+			end, opts)
+		end,
+	})
+
+	p.use({
+		"phaazon/mind.nvim",
+		branch = "v2.2",
+		cmd = { "MindOpenMain" },
+		requires = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("mind").setup({
+				-- edit options
+				edit = {
+					-- file extension to use when creating a data file
+					data_extension = ".adoc",
+
+					-- default header to put in newly created data files
+					data_header = "= %s",
+
+					-- format string for copied links
+					copy_link_format = "[](%s)",
+				},
+
+				-- persistence, both for the tree state and data files
+				persistence = {
+					-- path where the global mind tree is stored
+					state_path = "~/Desktop/mind.nvim/mind.json",
+
+					-- directory where to create global data files
+					data_dir = "~/Desktop/mind.nvim/data",
+				},
+			})
+		end,
+	})
+
+	p.use({
+		"kdheepak/lazygit.nvim",
+		cmd = "LazyGit",
+		setup = function()
+			vim.keymap.set("n", "<leader>gg", ":LazyGit<CR>")
 		end,
 	})
 
@@ -51,11 +182,6 @@ function tools.packer()
 				},
 			})
 		end,
-		setup = function()
-			if not packer_plugins["plenary.nvim"].loaded then
-				require("packer").loader("plenary.nvim")
-			end
-		end,
 		requires = {
 			{ "nvim-lua/plenary.nvim" },
 			{ "nvim-telescope/telescope-fzy-native.nvim", opt = true },
@@ -63,7 +189,34 @@ function tools.packer()
 			{ "nvim-telescope/telescope-live-grep-raw.nvim", opt = true },
 			{ "nvim-telescope/telescope-file-browser.nvim", opt = true },
 		},
+		setup = function()
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<leader>p", function()
+				vim.cmd("Telescope live_grep")
+			end, opts)
+
+			vim.keymap.set("n", "<leader>fb", function()
+				vim.cmd("Telescope file_browser")
+			end, opts)
+
+			vim.keymap.set("n", "<leader>ff", function()
+				vim.cmd("Telescope find_files")
+			end, opts)
+
+			vim.keymap.set("n", "<leader>fg", function()
+				vim.cmd("Telescope git_files")
+			end, opts)
+
+			vim.keymap.set("n", "<C-Q>", function()
+				require("telescope.builtin").quickfix()
+			end, opts)
+
+			if not packer_plugins["plenary.nvim"].loaded then
+				require("packer").loader("plenary.nvim")
+			end
+		end,
 	})
+
 	p.use({
 		"echasnovski/mini.sessions",
 		branch = "stable",
@@ -142,6 +295,7 @@ function tools.packer()
 
 	p.use({
 		"stevearc/overseer.nvim",
+		cmd = { "OverseerRun", "OverseerToggle" },
 		config = function()
 			require("overseer").setup({
 				task_list = {
@@ -179,7 +333,16 @@ function tools.packer()
 			"rcarriga/nvim-notify",
 			"stevearc/dressing.nvim",
 		},
-		cmd = { "OverseerRun", "OverseerToggle" },
+		setup = function()
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<leader>or", function()
+				vim.cmd("OverseerRun")
+			end, opts)
+
+			vim.keymap.set("n", "<leader>ot", function()
+				vim.cmd("OverseerToggle bottom")
+			end, opts)
+		end,
 	})
 
 	p.use({
@@ -237,6 +400,11 @@ function tools.packer()
 	p.use({
 		"kdheepak/lazygit.nvim",
 		cmd = "LazyGit",
+		config = function() end,
+	})
+
+	p.use({
+		"junegunn/vim-easy-align",
 		config = function() end,
 	})
 

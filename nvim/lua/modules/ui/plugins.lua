@@ -3,6 +3,30 @@ local p = require("packer")
 
 function ui.packer()
 	p.use({
+		"j-hui/fidget.nvim",
+		config = function()
+			require("fidget").setup({
+				notification = {
+					-- override_vim_notify = true,
+					window = {
+						winblend = 0,
+					},
+				},
+
+				progress = {
+					ignore = { "null-ls", "null_ls", "none-ls", "none_ls" },
+				},
+
+				integration = {
+					["nvim-tree"] = {
+						enable = true,
+					},
+				},
+			})
+		end,
+	})
+
+	p.use({
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
 			require("ibl").setup({
@@ -47,6 +71,12 @@ function ui.packer()
 
 		cmd = { "NvimTreeToggle", "NvimTreeFocus", "NvimTreeFindFile", "NvimTreeCollapse" },
 		requires = { "nvim-tree/nvim-web-devicons" },
+		setup = function()
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<space>n", function()
+				vim.cmd("NvimTreeToggle")
+			end, opts)
+		end,
 	})
 
 	p.use({
@@ -66,6 +96,15 @@ function ui.packer()
 			vim.g.floaterm_keymap_toggle = "<F7>"
 			vim.g.floaterm_width = 0.9
 			vim.g.floaterm_height = 0.9
+
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<F7>", function()
+				vim.cmd("FloatermToggle")
+			end, opts)
+
+			vim.keymap.set("t", "<F7>", function()
+				vim.cmd("<C-\\><C-n>:FloatermToggle")
+			end, opts)
 		end,
 	})
 
@@ -84,13 +123,11 @@ function ui.packer()
 				extensions = { "quickfix", "overseer" },
 				sections = {
 					lualine_a = { "mode" },
-					lualine_b = {
-						"require'lsp-status'.status()",
-					},
-					lualine_c = { "branch", "filename", "diff" },
-					lualine_x = { "fileformat", "filetype" },
-					lualine_y = { "overseer", "diff" },
-					-- lualine_z = { "location", selected_line },
+					lualine_b = { "filename" },
+					lualine_c = { "branch" },
+					lualine_d = { "overseer" },
+					lualine_x = { "fileformat" },
+					lualine_y = { "filetype" },
 				},
 				options = {
 					globalstatus = true,
@@ -141,8 +178,6 @@ function ui.packer()
 		config = function()
 			require("bufferline").setup({
 				options = {
-					-- 	always_show_bufferline = true,
-					-- 	diagnostics = "nvim_lsp",
 					mode = "tabs",
 					numbers = "ordinal",
 					offsets = {
@@ -153,13 +188,42 @@ function ui.packer()
 						},
 					},
 					separator = false,
-					-- separator_style = "slant",
 					show_buffer_close_icons = false,
-					-- 	show_buffer_icons = false,
-					-- 	show_duplicate_prefix = false,
+					show_buffer_icons = false,
+					show_duplicate_prefix = false,
 					themable = true,
 				},
 			})
+		end,
+		setup = function()
+			local opts = { noremap = true, silent = true }
+			vim.keymap.set("n", "<space>1", function()
+				vim.cmd("BufferLineGoToBuffer 1")
+			end, opts)
+			vim.keymap.set("n", "<space>2", function()
+				vim.cmd("BufferLineGoToBuffer 2")
+			end, opts)
+			vim.keymap.set("n", "<space>3", function()
+				vim.cmd("BufferLineGoToBuffer 3")
+			end, opts)
+			vim.keymap.set("n", "<space>4", function()
+				vim.cmd("BufferLineGoToBuffer 4")
+			end, opts)
+			vim.keymap.set("n", "<space>5", function()
+				vim.cmd("BufferLineGoToBuffer 5")
+			end, opts)
+			vim.keymap.set("n", "<space>6", function()
+				vim.cmd("BufferLineGoToBuffer 6")
+			end, opts)
+			vim.keymap.set("n", "<space>7", function()
+				vim.cmd("BufferLineGoToBuffer 7")
+			end, opts)
+			vim.keymap.set("n", "<space>8", function()
+				vim.cmd("BufferLineGoToBuffer 8")
+			end, opts)
+			vim.keymap.set("n", "<space>9", function()
+				vim.cmd("BufferLineGoToBuffer 9")
+			end, opts)
 		end,
 	})
 
@@ -167,6 +231,22 @@ function ui.packer()
 		"rcarriga/nvim-notify",
 		config = function()
 			require("notify").setup({})
+		end,
+	})
+
+	p.use({
+		"folke/zen-mode.nvim",
+		cmd = "ZenMode",
+		config = function()
+			vim.keymap.set("n", "<leader>zz", function()
+				require("zen-mode").setup({
+					window = {
+						width = 100,
+						options = {},
+					},
+				})
+				require("zen-mode").toggle()
+			end)
 		end,
 	})
 end

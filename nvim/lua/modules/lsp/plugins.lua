@@ -24,32 +24,45 @@ function lsp.packer()
 
 	p.use({
 		"neovim/nvim-lspconfig",
+		requires = {
+			"williamboman/mason-lspconfig.nvim",
+			"williamboman/mason.nvim",
+			"williamboman/mason.nvim",
+		},
+		after = {
+			"lsp_signature.nvim",
+		},
 		event = "BufReadPre",
 		config = function()
-			local servers = {
-				-- "ansiblels",
-				"bashls",
-				"cucumber_language_server",
-				"gopls",
-				"rnix",
-				"terraform_lsp",
-				"terraformls",
-				"tsserver",
-				"yamlls",
-			}
+			require("mason").setup({})
+			require("mason-lspconfig").setup({
+				ensure_installed = {
+					"gopls",
+				},
+				handlers = {
+					function(server_name) -- default handler (optional)
+						local server = require("lspconfig")[server_name]
+						server.setup({
+							capabilities = capabilities,
+							on_attach = function(client, bufnr)
+								require("lsp_signature").on_attach(require("lsp_signature"), bufnr)
+							end,
+						})
+					end,
+				},
+			})
 
-			local lspcfg = require("lspconfig")
-			local sign = require("lsp_signature")
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-			for _, def in pairs(servers) do
-				local cfg = lspcfg[def]
-				cfg.setup({
-					capabilities = capabilities,
-				})
-
-				sign.setup(cfg)
-			end
+			vim.diagnostic.config({
+				update_in_insert = true,
+				float = {
+					focusable = false,
+					style = "minimal",
+					border = "rounded",
+					source = "always",
+					header = "",
+					prefix = "",
+				},
+			})
 		end,
 		setup = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -90,12 +103,6 @@ function lsp.packer()
 				end,
 			})
 		end,
-		requires = {
-			"hrsh7th/cmp-nvim-lsp",
-		},
-		after = {
-			"lsp_signature.nvim",
-		},
 	})
 
 	p.use({
@@ -118,6 +125,9 @@ function lsp.packer()
 					null_ls.builtins.diagnostics.deadnix,
 					null_ls.builtins.diagnostics.golangci_lint,
 					null_ls.builtins.diagnostics.hadolint,
+					null_ls.builtins.diagnostics.sqlfluff.with({
+						extra_args = { "--dialect", "postgres" }, -- change to your dialects
+					}),
 					null_ls.builtins.diagnostics.statix,
 					null_ls.builtins.diagnostics.vale,
 					null_ls.builtins.diagnostics.yamllint,
@@ -137,6 +147,11 @@ function lsp.packer()
 					-- Formatting/lua
 					null_ls.builtins.formatting.prettierd,
 					null_ls.builtins.formatting.stylua,
+					-- Formatting/sql
+					null_ls.builtins.formatting.sqlfluff.with({
+						extra_args = { "--dialect", "postgres" }, -- change to your dialects
+					}),
+					null_ls.builtins.formatting.pg_format,
 				},
 				on_attach = function(client, bufnr)
 					if client.supports_method("textDocument/formatting") then
@@ -158,12 +173,7 @@ function lsp.packer()
 		"hrsh7th/nvim-cmp",
 		config = function()
 			local cmp = require("cmp")
-			local sources = {
-				{ name = "nvim_lsp" },
-				{ name = "treesitter", keyword_length = 2 },
-				{ name = "look", keyword_length = 2 },
-				{ name = "path" },
-			}
+			local sources = {}
 			cmp.setup({
 				completion = {
 					autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
@@ -194,17 +204,23 @@ function lsp.packer()
 						require("luasnip").lsp_expand(args.body)
 					end,
 				},
-				sources = sources,
+				sources = {
+					{ name = "nvim_lsp" },
+					-- { name = "buffer" },
+					{ name = "path" },
+					-- { name = "cmdline" },
+					-- { name = "emoji" },
+				},
 			})
 		end,
 		requires = {
-			"neovim/nvim-lspconfig",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-emoji",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-cmdline",
 			"L3MON4D3/LuaSnip",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-cmdline",
+			"hrsh7th/cmp-emoji",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
+			"neovim/nvim-lspconfig",
 		},
 	})
 end

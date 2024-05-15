@@ -74,7 +74,10 @@ function lang.packer()
 		end,
 	})
 
-	p.use({ "LnL7/vim-nix" })
+	p.use({
+		"LnL7/vim-nix",
+		ft = "nix",
+	})
 
 	p.use({
 		"echasnovski/mini.nvim",
@@ -88,27 +91,35 @@ function lang.packer()
 				},
 			})
 
+			require("mini.splitjoin").setup({
+				mappings = {
+					toggle = "st",
+					split = "ss",
+					join = "sj",
+				},
+			})
+
 			require("mini.trailspace").setup({})
 		end,
 	})
 
 	p.use({
 		"ray-x/go.nvim",
-		requires = { -- optional packages
-			"ray-x/guihua.lua",
+		requires = {
 			"neovim/nvim-lspconfig",
 			"nvim-treesitter/nvim-treesitter",
+			"ray-x/guihua.lua",
 		},
 		config = function()
 			require("go").setup({
 				trouble = true,
-				lsp_gofumpt = true,
-				lsp_diag_update_in_insert = true,
-				lsp_document_formatting = true,
+				-- lsp_gofumpt = true,
+				-- lsp_diag_update_in_insert = true,
+				-- lsp_document_formatting = true,
 				diagnostic = {
 					virtual_text = { prefix = "🐹" },
-					signs = true,
-					update_in_insert = false,
+					-- signs = true,
+					-- update_in_insert = false,
 				},
 			})
 		end,
@@ -143,16 +154,6 @@ function lang.packer()
 					},
 				},
 			})
-		end,
-	})
-
-	p.use({
-		"sbdchd/neoformat",
-		cmd = { "Neoformat" },
-		config = function()
-			vim.cmd([[
-	            let g:neoformat_only_msg_on_error = 1
-            ]])
 		end,
 	})
 

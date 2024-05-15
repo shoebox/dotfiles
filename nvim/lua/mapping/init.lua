@@ -7,24 +7,6 @@ local leader_map = function()
 	--  vim.g.mapleader = "/"
 end
 
-local plugin_telescope = {
-	["n|<leader>p"] = map_cu("Telescope live_grep"):with_noremap():with_silent(),
-	["n|<leader>fb"] = map_cu("Telescope file_browser"):with_noremap():with_silent(),
-	["n|<leader>ff"] = map_cu("Telescope find_files"):with_noremap():with_silent(),
-	["n|<leader>fg"] = map_cu("Telescope git_files"):with_noremap():with_silent(),
-	["n|<leader>ft"] = map_cu("Telescope help_tags"):with_noremap():with_silent(),
-	["n|<C-Q>"] = map_cr("lua require('telescope.builtin').quickfix()"):with_noremap():with_silent(),
-}
-
-local plugin_nvimtree = {
-	["n|<space>n"] = map_cr("NvimTreeToggle"):with_noremap():with_silent(),
-}
-
-local plugin_floatterm = {
-	["n|<F7>"] = map_cr("ToggleTerm"):with_noremap():with_silent(),
-	["t|<F7>"] = map_cr("<C-\\><C-n>:ToggleTerm"):with_noremap():with_silent(),
-}
-
 local global_clipb = {
 	["v|<leader>c"] = map_cmd('"+y'):with_noremap():with_silent(),
 	["i|<leader>c"] = map_cmd('"+y'):with_noremap():with_silent(),
@@ -47,18 +29,6 @@ local global_git = {
 	["n|gP"] = map_cr("G push"):with_noremap():with_silent(),
 	["v|gP"] = map_cr("G push"):with_noremap():with_silent(),
 	["t|gP"] = map_cr("G push"):with_noremap():with_silent(),
-}
-
-local global_tabs = {
-	["n|<space>1"] = map_cu("BufferLineGoToBuffer 1"):with_silent(),
-	["n|<space>2"] = map_cu("BufferLineGoToBuffer 2"):with_silent(),
-	["n|<space>3"] = map_cu("BufferLineGoToBuffer 3"):with_silent(),
-	["n|<space>4"] = map_cu("BufferLineGoToBuffer 4"):with_silent(),
-	["n|<space>5"] = map_cu("BufferLineGoToBuffer 5"):with_silent(),
-	["n|<space>6"] = map_cu("BufferLineGoToBuffer 6"):with_silent(),
-	["n|<space>7"] = map_cu("BufferLineGoToBuffer 7"):with_silent(),
-	["n|<space>8"] = map_cu("BufferLineGoToBuffer 8"):with_silent(),
-	["n|<space>9"] = map_cu("BufferLineGoToBuffer 9"):with_silent(),
 }
 
 local plugin_dap = function()
@@ -113,11 +83,6 @@ local plugin_dap = function()
 	end)
 end
 
-local plugin_overseer = {
-	["n|<leader>or"] = map_cu("OverseerRun"),
-	["n|<leader>ot"] = map_cu("OverseerToggle bottom"),
-}
-
 local plugin_hop = function()
 	local hop = require("hop")
 	local directions = require("hop.hint").HintDirection
@@ -135,20 +100,7 @@ local plugin_hop = function()
 	end, { remap = true })
 end
 
-local lsp_diagnostics = function()
-	local opts = { noremap = true, silent = true }
-	vim.keymap.set("n", "<leader>dl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-	vim.keymap.set("n", "<leader>dn", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
-	vim.keymap.set("n", "<leader>dp", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
-	vim.keymap.set("n", "<leader>dh", "<cmd>lua vim.diagnostic.hide()<CR>", opts)
-	vim.keymap.set("n", "<leader>ds", "<cmd>lua vim.diagnostic.show()<CR>", opts)
-end
-
 vim.keymap.set("n", "<-s", "<cmd>w<CR")
-
-local plugin_lazygit = {
-	["n|<leader>gg"] = map_cr("LazyGit"):with_noremap():with_silent(),
-}
 
 local plugin_vim_easyalign = {
 	["n|<leader>ga"] = map_cr("EasyAlign"):with_noremap():with_silent(),
@@ -160,29 +112,14 @@ local nb = function()
 	vim.keymap.set("n", "<leader>wt", ":e `='~/.nb/home/Journal/' . expand(strftime('%Y-%m-%d')) . '.adoc'` <CR>", opts)
 end
 
-local gen = function()
-	vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
-end
-
 leader_map()
 bind.nvim_load_mapping(global_clipb)
 bind.nvim_load_mapping(global_git)
 bind.nvim_load_mapping(global_nav)
-bind.nvim_load_mapping(global_tabs)
-bind.nvim_load_mapping(plugin_floatterm)
-bind.nvim_load_mapping(plugin_nvimtree)
-bind.nvim_load_mapping(plugin_overseer)
-bind.nvim_load_mapping(plugin_telescope)
-bind.nvim_load_mapping(plugin_lazygit)
+-- bind.nvim_load_mapping(plugin_telescope)
 bind.nvim_load_mapping(plugin_vim_easyalign)
 
 plugin_hop()
 plugin_dap()
-lsp_diagnostics()
 
 nb()
-gen()
-
-vim.keymap.set("x", "<leader>re", function()
-	require("refactoring").refactor("Extract Function")
-end)
