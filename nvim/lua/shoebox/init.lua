@@ -1,0 +1,7 @@
+require("shoebox.mapping")
+require("shoebox.core")
+require("shoebox.lazy_init")
+-- require("shoebox.core")
+-- require("autocmd")
+-- require("abbrev")
+-- require("filetype")
