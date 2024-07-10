@@ -1,4 +1,4 @@
-local focs_group = vim.api.nvim_create_augroup("lint", { clear = true })
+local focus_group = vim.api.nvim_create_augroup("focus_group", { clear = true })
 
 vim.api.nvim_create_autocmd({ "FocusLost" }, {
 	group = focus_group,
