@@ -1,1 +1,6 @@
-return {{ "mfussenegger/nvim-ansible" }}
+return {
+	{
+		"mfussenegger/nvim-ansible",
+		ft = "yaml.ansible",
+	},
+}

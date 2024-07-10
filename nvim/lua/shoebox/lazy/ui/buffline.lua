@@ -3,6 +3,12 @@ return {
 		"akinsho/bufferline.nvim",
 		config = function()
 			require("bufferline").setup({
+				highlights = {
+					separator = {
+						fg = "#111111",
+						bg = "#111111",
+					},
+				},
 				options = {
 					mode = "tabs",
 					numbers = "ordinal",
@@ -13,7 +19,7 @@ return {
 							text_align = "left",
 						},
 					},
-					separator = false,
+					separator_style = " ",
 					show_buffer_close_icons = false,
 					show_buffer_icons = false,
 					show_duplicate_prefix = false,
@@ -50,5 +56,6 @@ return {
 				vim.cmd("BufferLineGoToBuffer 9")
 			end, opts)
 		end,
+		event = "VeryLazy",
 	},
 }

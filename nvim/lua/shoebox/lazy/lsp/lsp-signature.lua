@@ -6,11 +6,12 @@ return {
 				auto_close_after = 200,
 				bind = true,
 				close_timeout = 200,
-				doc_lines = 20,
-				noice = true,
-				transparency = 10,
-				wrap = true,
+				-- doc_lines = 20,
+				-- noice = true,
+				-- transparency = 10,
+				-- wrap = true,
 			})
 		end,
+		event = "VimEnter",
 	},
 }

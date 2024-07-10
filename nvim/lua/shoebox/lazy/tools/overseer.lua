@@ -1,7 +1,7 @@
 return {
 	{
 		"stevearc/overseer.nvim",
-		cmd = { "OverseerRun", "OverseerToggle" },
+		cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerClose", "OverseerInfo" },
 		config = function()
 			require("overseer").setup({
 				task_list = {
@@ -10,26 +10,40 @@ return {
 				},
 				templates = { "builtin", "user.go_build", "user.nix_build" },
 				log = {
-					type = "notify",
+					{
+						type = "notify",
+						level = vim.log.levels.DEBUG,
+					},
 				},
-				-- Aliases for bundles of components. Redefine the builtins, or create your own.
 				component_aliases = {
-					-- Most tasks are initialized with the default components
 					default = {
-						{ "display_duration", detail_level = 2 },
-						{ "on_result_notify", infer_status_from_diagnostics = true, on_change = false },
-						"on_exit_set_status",
-					},
-					-- Tasks from tasks.json use these components
-					default_vscode = {
+						{
+							"display_duration",
+							detail_level = 2,
+						},
+						{
+							"on_complete_dispose",
+							require_view = { "SUCCESS", "FAILURE" },
+						},
+						{
+							"on_output_parse",
+							parser = {
+								diagnostics = {
+									{ "extract", "^([^%s].+):(%d+): (.+)$", "filename", "lnum", "text" },
+								},
+							},
+						},
 						"default",
-						{ "display_duration", detail_level = 2 },
+						"display_duration",
 						"on_output_summarize",
-						"on_result_diagnostics",
-						"on_result_diagnostics_quickfix",
+						"on_exit_set_status",
 						"on_complete_notify",
-						"on_complete_dispose",
+						"stdout_to_fidget",
 					},
+				},
+
+				strategy = {
+					"terminal",
 				},
 			})
 		end,
@@ -49,7 +63,7 @@ return {
 			},
 			{
 				"<leader>or",
-				"<cmd>OverseerRun",
+				"<cmd>OverseerRun<CR>",
 				desc = "Overseer - Opens the tasks list",
 			},
 		},
