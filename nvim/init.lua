@@ -1,5 +1,1 @@
-require("core")
-require("mapping")
-require("autocmd")
-require("abbrev")
-require("filetype")
+require("shoebox")
