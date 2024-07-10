@@ -14,5 +14,6 @@ vim.filetype.add({
 
 		["haproxy.cfg"] = "haproxy",
 		[".*/config.d/.*%.cfg"] = "haproxy",
+		["*.feature"] = "gherkin",
 	},
 })
