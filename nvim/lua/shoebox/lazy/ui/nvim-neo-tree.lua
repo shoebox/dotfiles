@@ -3,6 +3,9 @@ return {
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
 		config = function()
+			local git_available = vim.fn.executable("git") == 1
+			local icons = require("mini.icons")
+
 			require("neo-tree").setup({
 				close_if_last_window = true,
 				event_handlers = {
@@ -19,12 +22,14 @@ return {
 						enabled = true,
 						leave_dirs_open = false,
 					},
+					filtered_items = { hide_gitignored = git_available },
 				},
 				window = {
 					mappings = {
 						["<cr>"] = "open_with_window_picker",
 						["<c-t>"] = "open_tabnew",
 					},
+					width = 30,
 				},
 			})
 		end,
