@@ -27,14 +27,10 @@ return {
 				progress = {
 					ignore_empty_message = true,
 					ignore = {
-						"null-ls",
-						"null_ls",
-						"none-ls",
-						"none_ls",
-						"NvimTree",
 					},
 				},
 			})
 		end,
+		event = "VeryLazy",
 	},
 }
