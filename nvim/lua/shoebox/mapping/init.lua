@@ -79,24 +79,7 @@ local plugin_dap = function()
 	end)
 end
 
-local plugin_hop = function()
-	-- local hop = require("hop")
-	-- local directions = require("hop.hint").HintDirection
-	-- vim.keymap.set("", "<leader>f", function()
-	-- 	hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-	-- end, { remap = true })
-	-- vim.keymap.set("", "<leader>F", function()
-	-- 	hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-	-- end, { remap = true })
-	-- vim.keymap.set("", "<leader>t", function()
-	-- 	hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-	-- end, { remap = true })
-	-- vim.keymap.set("", "<leader>T", function()
-	-- 	hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
-	-- end, { remap = true })
-end
-
-vim.keymap.set("n", "<-s", "<cmd>w<CR")
+vim.keymap.set({ "n", "v", "x" }, "<c-s>", "<cmd>w<CR>")
 
 local plugin_vim_easyalign = {
 	["n|<leader>ga"] = map_cr("EasyAlign"):with_noremap():with_silent(),
@@ -114,7 +97,6 @@ bind.nvim_load_mapping(global_nav)
 -- bind.nvim_load_mapping(plugin_telescope)
 bind.nvim_load_mapping(plugin_vim_easyalign)
 
-plugin_hop()
 plugin_dap()
 
 nb()
