@@ -6,5 +6,6 @@ return {
 				colorcolumn = "100",
 			})
 		end,
+		event = "VeryLazy",
 	},
 }
