@@ -5,5 +5,6 @@ return {
 		config = function()
 			require("which-key").setup({})
 		end,
+		dependencies = { "echasnovski/mini.nvim" },
 	},
 }
