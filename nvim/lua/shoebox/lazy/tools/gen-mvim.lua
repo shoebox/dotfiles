@@ -22,7 +22,8 @@ return {
 
 			gen.setup({
 				display_mode = "split",
-				model = "deepseek-coder:6.7b",
+				-- model = "deepseek-coder:6.7b",
+				model = "deepseek-coder-v2",
 				no_auto_close = true,
 				replace = false,
 				show_model = true,
@@ -30,6 +31,7 @@ return {
 			})
 
 			gen.prompts = {}
+			gen.prompts["Chat"] = { prompt = "$input" }
 			gen.prompts["Suggest better naming"] = {
 				prompt = function()
 					return "Take all variable and function names, and provide only a list with suggestions with improved naming if any changes required:"
@@ -79,8 +81,7 @@ return {
 					.. "how-to improve readability, and maintainability. "
 					.. "how to avoid any code smells and anti-patterns. "
 					.. "If the provided code does does not need any changes, just say 'No changes needed'. "
-					.. "Only ouput the result in format:"
-					.. ":\n```"
+					.. "Only ouput the result in format:\n```"
 					.. vim.bo.filetype
 					.. "\n"
 					.. "$text"
@@ -102,10 +103,25 @@ return {
 				replace = true,
 				extract = "```$filetype\n(.-)```",
 			}
+
+			gen.prompts["Generate unit-tests"] = {
+				prompt = "Act as a top-notch developer. "
+					.. "Generate unit-tests for the given code."
+					.. "It must following standard coding convention for the language. "
+					.. "Full feature coverage is expected. "
+                    .. "Use Gherkin comments syntax for different testing phases."
+					.. ":\n```"
+					.. vim.bo.filetype
+					.. "\n"
+					.. "$text"
+					.. "\n```",
+				extract = "```$filetype\n(.-)```",
+			}
+
 			gen.prompts["Adds missing documentation to method"] = {
 				prompt = "Act as a top-notch developer. Adds missing documentation to the following method. "
-					.. "It should only document the functional itself"
-					.. "It must following standard coding convention for the language"
+					.. "It should only document the functional itself. "
+					.. "It must following standard coding convention for the language."
 					.. ":\n```"
 					.. vim.bo.filetype
 					.. "\n"
@@ -147,19 +163,21 @@ return {
 
 			vim.keymap.set({ "n", "v" }, "<leader>]", ":Gen<CR>")
 		end,
-		-- keys = {
-		-- 	{
-		-- 		"<leader>]",
-		-- 		"<cmd>:Gen<CR>",
-		-- 		mode = "n",
-		-- 		desc = "Gen",
-		-- 	},
-		-- 	{
-		-- 		"<leader>]",
-		-- 		"<cmd>:Gen<CR>",
-		-- 		mode = "v",
-		-- 		desc = "Gen",
-		-- 	},
-		-- },
+		event = "VeryLazy",
+		keys = {
+			{
+				"<leader>]",
+				function()
+					require("gen").select_model()
+				end,
+				desc = "Gen",
+			},
+			-- {
+			-- 	"<leader>]",
+			-- 	"<cmd>:Gen<CR>",
+			-- 	mode = "v",
+			-- 	desc = "Gen",
+			-- },
+		},
 	},
 }
