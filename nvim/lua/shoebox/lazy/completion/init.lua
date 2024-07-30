@@ -28,10 +28,17 @@ return {
 					["<down>"] = cmp.mapping.select_next_item(),
 					["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
 				},
+				snippet = {
+					expand = function(args)
+						require("luasnip").lsp_expand(args.body)
+					end,
+				},
 				sources = {
 					{ name = "nvim_lsp" },
 					{ name = "buffer" },
+					{ name = "luasnip" },
 					{ name = "path" },
+					{ name = "buffer" },
 				},
 			})
 		end,
@@ -42,6 +49,7 @@ return {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
 			"neovim/nvim-lspconfig",
+			"rafamadriz/friendly-snippets",
 			{
 				"windwp/nvim-autopairs",
 				event = "InsertEnter",
