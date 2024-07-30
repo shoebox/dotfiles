@@ -25,7 +25,7 @@ gui:
       - "#eed49f"
 
 customCommands:
-  - key: "C"
+  - key: "Z"
     command: "git cz c"
     description: "commit with commitizen"
     context: "files"
