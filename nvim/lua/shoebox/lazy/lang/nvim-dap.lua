@@ -1,7 +1,16 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
-		dependencies = { "nvim-neotest/nvim-nio", "rcarriga/nvim-dap-ui" },
+		dependencies = {
+			"nvim-neotest/nvim-nio",
+			"rcarriga/nvim-dap-ui",
+			{
+				"theHamsta/nvim-dap-virtual-text",
+                config = function ()
+                    require("nvim-dap-virtual-text").setup()
+                end
+			},
+		},
 		config = function()
 			local function get_arguments()
 				local co = coroutine.running()
@@ -64,5 +73,6 @@ return {
 			}
 			require("dapui").setup()
 		end,
+		event = "VeryLazy",
 	},
 }
