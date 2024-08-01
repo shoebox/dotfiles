@@ -2,7 +2,11 @@ return {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
-			require("nvim-treesitter.install").compilers = { "gcc-11" }
+			require("nvim-treesitter.install").compilers = { 
+				"gcc-11" ,
+				"gcc",
+"clang",
+			}
 			require("nvim-treesitter.configs").setup({
 				auto_install = true,
 				highlight = {
