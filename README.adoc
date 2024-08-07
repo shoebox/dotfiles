@@ -1,0 +1,24 @@
+++++
+<h1 align="center">
+  <br>
+  <img src="logo.jpg" width="150" alt="logo" style="background:white;"/>
+  <br/>
+  My dot files
+</h1>
+
+++++
+
+== About
+
+Welcome to my personal dot files repository! This collection contains essential
+configurations for Neovim, Tmux, and Nix-Darwin tailored specifically to my
+preferences.
+
+
+== Disclaimer
+[WARNING]
+These dot files are highly personalized and may not align with the preferences
+or needs of others. They are intended solely for my personal use on macOS
+systems.
+
+Use at your own risk!
