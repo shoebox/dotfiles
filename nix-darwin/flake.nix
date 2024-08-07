@@ -16,7 +16,7 @@
         # $ nix-env -qaP | grep wget
         environment = {
           variables = {
-            BROWSER = "firefox";
+            BROWSER = "/Applications/Firefox.app/Contents/MacOS/firefox";
             EDITOR = "nvim";
             PAGER = "less";
             XDG_CONFIG_HOME = "/Users/jme86/.config";
@@ -36,7 +36,24 @@
 
             # tools
             ollama
+            gnupg
+            gh
+            gh-dash
+            graphviz # used by go pprof vizualisation
             gopass
+            go-task
+            htop
+            m-cli
+            nb
+            neofetch
+
+            # documentation
+            antora
+            vale
+
+            # node
+            nodejs_22
+            nodePackages_latest.browser-sync
 
             # bash related
             atuin
@@ -59,6 +76,8 @@
             lazygit
 
             # Golang
+            air
+            delve
             gofumpt
             goimports-reviser
             golines
@@ -66,6 +85,7 @@
             gotests
             gotestsum
             mockgen
+
             prettierd
             reftools
             stylua
@@ -88,11 +108,11 @@
         nix.settings.experimental-features = "nix-command flakes";
 
         programs = {
-          tmux.enable = true;
+          # tmux.enable = true;
           zsh = {
             enable = true; # default shell on catalina
             enableCompletion = false;
-            enableSyntaxHighlighting = true;
+            enableSyntaxHighlighting = false;
           };
         };
 
@@ -132,12 +152,13 @@
 
         system.activationScripts.alacritty.enable = true;
 
-        imports = [ ./allow-unfree.nix ];
+        imports = [ ./allow-unfree.nix ./tmux.nix ];
 
         # Add ability to used TouchID for sudo authentication
         security.pam.enableSudoTouchIdAuth = true;
       };
-    in {
+    in
+    {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#UKQL3QJ6QR16
       darwinConfigurations."UKQL3QJ6QR16" = nix-darwin.lib.darwinSystem {
