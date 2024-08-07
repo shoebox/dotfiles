@@ -4,6 +4,7 @@ return {
 		dependencies = "nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("headlines").setup({
+				markdown = {},
 				loongdoc = {
 					query = vim.treesitter.query.parse(
 						"loongdoc",
@@ -14,21 +15,27 @@ return {
 					            (title_h2_marker)
 					            (title_h3_marker)
                             ] @headline
+
+                            [ (quoted_line) ] @quote
                         ]]
 					),
 					headline_highlights = { "Headline" },
 					bullet_highlights = {
-						"@loongdoc.title.h0.marker",
-						"@loongdoc.title.h1.marker",
+						-- "@loongdoc.title.h0.marker",
+						-- "@loongdoc.title.h1.marker",
+						-- "@loongdoc.title.h2.marker",
+						-- "@loongdoc.title.h3.marker",
+						-- "@loongdoc.title.h4.marker",
+						-- "@quoted_line.title.h4.marker",
 					},
 					bullets = { "◉", "○", "✸", "✿" },
-					codeblock_highlight = "quoted_block",
+					codeblock_highlight = "quotes_block",
 					dash_highlight = "Dash",
 					dash_string = "-",
 					doubledash_highlight = "DoubleDash",
 					doubledash_string = "=",
-					quote_highlight = "Quote",
-					quote_string = "┃",
+					uote_highlight = "Quote",
+					quote_string = "quoted_line",
 					fat_headlines = true,
 					fat_headline_upper_string = "▃",
 					fat_headline_lower_string = "🬂",

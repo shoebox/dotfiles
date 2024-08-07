@@ -4,10 +4,10 @@ return {
 		branch = "v3.x",
 		config = function()
 			local git_available = vim.fn.executable("git") == 1
-			local icons = require("mini.icons")
 
 			require("neo-tree").setup({
 				close_if_last_window = true,
+				auto_clean_after_session_restore = false,
 				event_handlers = {
 
 					{

@@ -22,7 +22,6 @@ return {
 
 			gen.setup({
 				display_mode = "split",
-				-- model = "deepseek-coder:6.7b",
 				model = "deepseek-coder-v2",
 				no_auto_close = true,
 				replace = false,
@@ -104,12 +103,24 @@ return {
 				extract = "```$filetype\n(.-)```",
 			}
 
+			gen.prompts["Generate Gherkin unit-tests cases"] = {
+				prompt = "Act as a top-notch developer. "
+					.. "Generate unit-tests cases for the given code."
+					.. "Full feature coverage is expected. "
+					.. "And Gherkin response format is expected.\n"
+					.. vim.bo.filetype
+					.. "\n"
+					.. "$text"
+					.. "\n```",
+				extract = "```$filetype\n(.-)```",
+			}
+
 			gen.prompts["Generate unit-tests"] = {
 				prompt = "Act as a top-notch developer. "
 					.. "Generate unit-tests for the given code."
 					.. "It must following standard coding convention for the language. "
 					.. "Full feature coverage is expected. "
-                    .. "Use Gherkin comments syntax for different testing phases."
+					.. "Use Gherkin comments syntax for different testing phases."
 					.. ":\n```"
 					.. vim.bo.filetype
 					.. "\n"
@@ -141,7 +152,7 @@ return {
 			}
 
 			gen.prompts["Review code"] = {
-				prompt = "Review the following code and make concise suggestions, only output the result in format:\n```"
+				prompt = "Act as a top-notch developer, review the following code and make concise suggestions.```"
 					.. vim.bo.filetype
 					.. "\n"
 					.. "$text"

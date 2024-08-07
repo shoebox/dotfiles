@@ -1,18 +1,29 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.install").compilers = { 
-				"gcc-11" ,
+			require("nvim-treesitter.install").compilers = {
+				"gcc-11",
 				"gcc",
-"clang",
+				"clang",
 			}
 			require("nvim-treesitter.configs").setup({
 				auto_install = true,
 				highlight = {
 					enable = true,
 				},
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "<C-space>",
+						node_incremental = "<C-space>",
+						scope_incremental = false,
+						node_decremental = "<bs>",
+					},
+				},
 			})
+
 			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 			parser_config.d2 = {
 				install_info = {
@@ -23,6 +34,7 @@ return {
 				filetype = "d2",
 			}
 		end,
+		event = { "BufReadPre", "BufNewFile" },
 	},
 	{
 		"nvim-treesitter/nvim-treesitter-refactor",
@@ -60,6 +72,7 @@ return {
 			vim.filetype.add({
 				extension = {
 					adoc = "loongdoc",
+					asciidoc = "loongdoc",
 				},
 			})
 

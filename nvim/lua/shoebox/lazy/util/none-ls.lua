@@ -62,7 +62,7 @@ return {
 								vim.lsp.buf.format({
 									async = true,
 									filter = function(c)
-										return c.name == "null-ls"
+										return c.name == "null-ls" or c.name == "neo-tree" or c.name == "kulala://ui"
 									end,
 								})
 							end,
