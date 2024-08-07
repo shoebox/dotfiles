@@ -11,8 +11,14 @@
 == About
 
 Welcome to my personal dot files repository! This collection contains essential
-configurations for Neovim, Tmux, and Nix-Darwin tailored specifically to my
-preferences.
+configurations for:
+
+* Alacritty
+* LazyGit
+* NeoVim
+* Nix-Darwin
+* Tmux
+* Zsh + zimfw
 
 
 == Disclaimer
