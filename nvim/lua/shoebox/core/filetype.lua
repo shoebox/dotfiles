@@ -1,9 +1,11 @@
 vim.g.do_filetype_lua = 1
 
 vim.filetype.add({
-    extension = {
-    ['http'] = 'http',
-  },
+	extension = {
+		["http"] = "http",
+		["asciidoc"] = "loongdoc",
+		["adoc"] = "loongdoc",
+	},
 	pattern = {
 		-- GitHub workflows
 		[".*%.github/workflows/.*%.yml"] = "yaml.githubworkflow",
