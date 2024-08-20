@@ -34,8 +34,11 @@
             neovim
             ripgrep
 
-            # tools
+            # ml
             ollama
+
+            # tools
+            bruno
             gnupg
             gh
             gh-dash
@@ -43,12 +46,13 @@
             gopass
             go-task
             htop
-            m-cli
             nb
             neofetch
+            yazi
 
             # documentation
             antora
+            asciidoctor
             vale
 
             # node
@@ -108,7 +112,6 @@
         nix.settings.experimental-features = "nix-command flakes";
 
         programs = {
-          # tmux.enable = true;
           zsh = {
             enable = true; # default shell on catalina
             enableCompletion = false;
@@ -126,9 +129,16 @@
             };
 
             dock = {
+              appswitcher-all-displays = true;
               autohide = true;
+              autohide-delay = 0.1;
               show-recents = false;
               static-only = true;
+              persistent-apps = [
+                "${pkgs.alacritty}/Applications/Alacritty.app/"
+                "${pkgs.spotify}/Applications/Spotify.app/"
+                "${pkgs.slack}/Applications/Slack.app/"
+              ];
             };
 
             finder = {
