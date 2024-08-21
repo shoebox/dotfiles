@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+_: {
   programs.tmux = {
     defaultCommand = "zsh";
     enable = true;
