@@ -17,7 +17,6 @@
       configuration =
         { pkgs, ... }:
         {
-
           fonts.packages = with pkgs; [
             victor-mono
             nerdfonts
@@ -50,7 +49,6 @@
     in
     {
       # Build darwin flake using:
-      # $ darwin-rebuild build --flake .#UKQL3QJ6QR16
       darwinConfigurations."UKQL3QJ6QR16" = nix-darwin.lib.darwinSystem { modules = [ configuration ]; };
 
       # Expose the package set, including overlays, for convenience.

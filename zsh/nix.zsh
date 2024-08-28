@@ -7,4 +7,3 @@ fi
 export PATH="$PATH:/nix/var/nix/profiles/default/bin/"
 export PATH="$PATH:$HOME/.nix-profile/bin/"
 export PATH="$PATH:/Applications/Firefox.app/Contents/MacOS/"
-
