@@ -9,6 +9,10 @@ return {
 
 				-- Whether to write current session before quitting Neovim
 				autowrite = true,
+
+                hooks = {
+
+                },
 			})
 		end,
 	},

@@ -15,6 +15,30 @@ local ignore_buftype = {
 	"terminal",
 }
 
+vim.api.nvim_create_user_command("CloseBuffersNotInWorkspace", function()
+	local workspace = vim.fn.getcwd() .. "/" -- Adding "/" at the end to ensure that it's a directory path
+	for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+		if not vim.api.nvim_buf_is_loaded(buf) then
+			goto continue
+		end
+
+		local filepath = vim.api.nvim_buf_get_name(buf)
+		if vim.startswith(filepath, workspace) then
+			goto continue
+		end
+
+		-- Close the buffer
+		vim.notify(("Closing buffer %s"):format(filepath))
+
+		vim.api.nvim_buf_delete(buf, { force = true })
+		::continue::
+	end
+end, { desc = "Close all buffers not into workspace" })
+
+vim.api.nvim_create_user_command("CloseBuffersExpectCurrent", function()
+	vim.cmd("%bdelete|edit#|bdelete#")
+end, { desc = "Close all buffer but current one" })
+
 vim.api.nvim_create_user_command("WipeWindowlessBufs", function()
 	local bufinfos = vim.fn.getbufinfo({ buflisted = true })
 	vim.tbl_map(function(bufinfo)
@@ -34,8 +58,10 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
 
 		if not vim.bo[args.buf].readonly then
 			local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+			local modifiable = vim.api.nvim_get_option_value("modifiable", { buf = args.buf })
 			local ignore_buffername = { "", " " }
-			if not vim.tbl_contains(ignore_buftype, buftype) then
+
+			if modifiable and not vim.tbl_contains(ignore_buftype, buftype) then
 				local bufferName = vim.api.nvim_buf_get_name(0)
 				local infos = vim.fn.getbufinfo(bufid)
 
@@ -54,6 +80,22 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
 		end
 	end,
 })
+
+-- vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+-- 	group = focus_group,
+-- 	callback = function()
+-- 		vim.cmd("set relativenumber")
+-- 	end,
+-- 	pattern = { "*" },
+-- })
+--
+-- vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+-- 	group = focus_group,
+-- 	callback = function()
+-- 		vim.cmd("set norelativenumber")
+-- 	end,
+-- 	pattern = { "*" },
+-- })
 
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
 	group = focus_group,

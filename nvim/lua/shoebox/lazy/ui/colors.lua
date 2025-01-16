@@ -1,9 +1,9 @@
 function MyColorScheme(color)
-	color = color or "tokyonight-night"
+	color = color or "eldritch"
 	vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 return {
@@ -36,11 +36,8 @@ return {
 				terminal_colors = true,
 				-- transparent = true,
 			})
-
-			vim.cmd.colorscheme("tokyonight-night")
-			MyColorScheme()
 		end,
-		lazy = false,
+		lazy = true,
 		priority = 1000,
 	},
 	{
@@ -70,5 +67,27 @@ return {
 			})
 		end,
 		lazy = true,
+	},
+	{
+		"EdenEast/nightfox.nvim",
+		config = function()
+			require("nightfox").setup({})
+		end,
+		lazy = true,
+	},
+	{
+		"eldritch-theme/eldritch.nvim",
+		lazy = false,
+		priority = 1000,
+		config = function()
+			require("eldritch").setup({
+
+				styles = {
+					background = "dark",
+				},
+				lualine_bold = true,
+			})
+			MyColorScheme()
+		end,
 	},
 }

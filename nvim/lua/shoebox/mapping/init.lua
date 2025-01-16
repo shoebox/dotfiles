@@ -1,6 +1,5 @@
 local bind = require("shoebox.mapping.helper")
 local map_cr = bind.map_cr
-local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 
 local global_clipb = {
@@ -27,64 +26,7 @@ local global_git = {
 	["t|gP"] = map_cr("G push"):with_noremap():with_silent(),
 }
 
-local plugin_dap = function()
-	vim.keymap.set("n", "<F5>", function()
-		require("dap").continue()
-	end)
-	vim.keymap.set("n", "<F2>", function()
-		require("dap").step_over()
-	end)
-	vim.keymap.set("n", "<F3>", function()
-		require("dap").step_into()
-	end)
-	vim.keymap.set("n", "<F4>", function()
-		require("dap").step_out()
-	end)
-	vim.keymap.set("n", "<Leader>b", function()
-		require("dap").toggle_breakpoint()
-	end)
-	vim.keymap.set("n", "<Leader>B", function()
-		require("dap").set_breakpoint()
-	end)
-	vim.keymap.set("n", "<Leader>lp", function()
-		require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
-	end)
-	vim.keymap.set("n", "<Leader>dr", function()
-		require("dap").repl.open()
-	end)
-	vim.keymap.set("n", "<Leader>dl", function()
-		require("dap").run_last()
-	end)
-	vim.keymap.set({ "n", "v" }, "<Leader>dh", function()
-		require("dap.ui.widgets").hover()
-	end)
-	vim.keymap.set({ "n", "v" }, "<Leader>dp", function()
-		require("dap.ui.widgets").preview()
-	end)
-	vim.keymap.set("n", "<Leader>df", function()
-		local widgets = require("dap.ui.widgets")
-		widgets.centered_float(widgets.frames)
-	end)
-	vim.keymap.set("n", "<Leader>ds", function()
-		local widgets = require("dap.ui.widgets")
-		widgets.centered_float(widgets.scopes)
-	end)
-	vim.keymap.set("n", "<Leader>do", function()
-		local ui = require("dapui")
-		ui.open()
-	end)
-	vim.keymap.set("n", "<Leader>dc", function()
-		local ui = require("dapui")
-		ui.close()
-	end)
-end
-
-vim.keymap.set({ "n", "v", "x" }, "<c-s>", "<cmd>w<CR>")
-
-local plugin_vim_easyalign = {
-	["n|<leader>ga"] = map_cr("EasyAlign"):with_noremap():with_silent(),
-	["x|<leader>ga"] = map_cr("EasyAlign"):with_noremap():with_silent(),
-}
+vim.keymap.set({ "n", "x" }, "<c-s>", "<cmd>w<CR>")
 
 local nb = function()
 	local opts = { noremap = true, silent = false }
@@ -94,9 +36,5 @@ end
 bind.nvim_load_mapping(global_clipb)
 bind.nvim_load_mapping(global_git)
 bind.nvim_load_mapping(global_nav)
--- bind.nvim_load_mapping(plugin_telescope)
-bind.nvim_load_mapping(plugin_vim_easyalign)
-
-plugin_dap()
 
 nb()

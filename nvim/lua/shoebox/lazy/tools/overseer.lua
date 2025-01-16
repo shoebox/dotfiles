@@ -51,7 +51,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
 			"rcarriga/nvim-notify",
-			"stevearc/dressing.nvim",
+			-- "stevearc/dressing.nvim",
 		},
 		keys = {
 			{

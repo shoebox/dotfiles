@@ -18,5 +18,12 @@ return {
 			})
 		end,
 		ft = { "go", "gomod" },
+		keys = {
+			{
+				"<leader>ga",
+				"<cmd>GoAlt<cr>",
+				desc = "NeoVim alt view",
+			},
+		},
 	},
 }

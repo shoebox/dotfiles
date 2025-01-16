@@ -1,3 +1,4 @@
+local vim = vim
 if vim.fn.argc() ~= 0 or #vim.api.nvim_list_wins() ~= 1 then
 	return
 end
@@ -97,19 +98,7 @@ end
 
 local intro_fmt = [[
 NVIM v%s
-
-Nvim is open source and freely distributable
-https://neovim.io/#chat
-
-type  :help nvim<Enter>       if you are new! 
-type  :checkhealth<Enter>     to optimize Nvim
-type  :q<Enter>               to exit         
-type  :help<Enter>            for help        
-
-type  :help news<Enter> to see changes in v%s
-
-Become a registered Vim user!
-type  :help register<Enter>   for information]]
+]]
 
 local ver = vim.version()
 local ver_str_min = string.format("%d.%d", ver.major, ver.minor)

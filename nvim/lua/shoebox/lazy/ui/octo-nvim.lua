@@ -8,7 +8,10 @@ return {
 		},
 		cmd = { "Octo" },
 		config = function()
-			require("octo").setup()
+			require("octo").setup({
+				github_hostname = "github.com",
+				ssh_aliases = { ["nbcugithub.com"] = "github.com" },
+			})
 		end,
 	},
 }

@@ -1,19 +1,38 @@
+local vim = vim
+
 return {
 	{
 		"nvimtools/none-ls.nvim",
 		event = "VimEnter",
+		keys = {
+			{
+				"<leader>!",
+				function()
+					vim.lsp.buf.format({
+						async = true,
+						filter = function(c)
+							return c.name == "null-ls" or c.name == "neo-tree" or c.name == "kulala://ui"
+						end,
+					})
+				end,
+			},
+		},
 		config = function()
 			local null_ls = require("null-ls")
 			local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
 			null_ls.setup({
+				debounce = 500,
+				default_timeout = 5000,
 				temp_dir = "/tmp",
-				update_in_insert = true,
+				update_in_insert = false,
+				log_level = "warn",
 				notify_format = "%s",
 				sources = {
 					null_ls.builtins.completion.spell,
 
 					-- code actions
+
 					null_ls.builtins.code_actions.impl,
 					null_ls.builtins.code_actions.refactoring,
 					null_ls.builtins.code_actions.statix,
@@ -28,6 +47,7 @@ return {
 					-- 	extra_args = { "--dialect", "postgres" }, -- change to your dialects
 					-- }),
 					null_ls.builtins.diagnostics.statix,
+					null_ls.builtins.diagnostics.terraform_validate,
 					-- null_ls.builtins.diagnostics.vale,
 					null_ls.builtins.diagnostics.yamllint,
 					null_ls.builtins.diagnostics.zsh,
@@ -35,30 +55,40 @@ return {
 					-- Formatting
 					-- Formatting/nix
 					null_ls.builtins.formatting.alejandra,
-					null_ls.builtins.formatting.nixfmt,
-					null_ls.builtins.formatting.nixpkgs_fmt,
+					-- null_ls.builtins.formatting.nixfmt,
+					-- null_ls.builtins.formatting.nixpkgs_fmt,
 					-- Formatting/golang
 					null_ls.builtins.formatting.gofmt,
 					null_ls.builtins.formatting.gofumpt,
-					-- null_ls.builtins.formatting.goimports,
+					null_ls.builtins.formatting.goimports,
 					null_ls.builtins.formatting.goimports_reviser,
-					null_ls.builtins.formatting.golines,
+					null_ls.builtins.formatting.golines.with({
+						extra_args = {
+							"--base-formatter=gofumpt",
+						},
+					}),
 					-- Formatting/lua
 					null_ls.builtins.formatting.prettierd,
 					null_ls.builtins.formatting.stylua,
+					null_ls.builtins.formatting.terraform_fmt,
 					-- Formatting/sql
-					-- null_ls.builtins.formatting.sqlfluff.with({
-					-- 	extra_args = { "--dialect", "postgres" }, -- change to your dialects
-					-- }),
+					null_ls.builtins.formatting.sqlfluff.with({
+						extra_args = { "--dialect", "postgres" }, -- change to your dialects
+					}),
 					-- null_ls.builtins.formatting.pg_format,
 				},
 				on_attach = function(client, bufnr)
 					if client.supports_method("textDocument/formatting") then
-						vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+						vim.api.nvim_create_autocmd({ "BufLeave", "InsertLeave" }, {
 							group = augroup,
 							buffer = bufnr,
 							callback = function()
+								if not vim.api.nvim_buf_is_valid(bufnr) then
+									return
+								end
+
 								vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+
 								vim.lsp.buf.format({
 									async = true,
 									filter = function(c)
@@ -67,16 +97,32 @@ return {
 								})
 							end,
 						})
-						vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+						vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 							buffer = bufnr,
 							callback = function()
-								vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-								vim.lsp.buf.format({
-									async = false,
-									filter = function(c)
-										return c.name == "null-ls"
-									end,
-								})
+								if not vim.api.nvim_buf_is_valid(bufnr) then
+									return
+								end
+
+								local infos = vim.fn.getbufinfo(bufnr)
+
+								-- do the buffer has any changes
+								local changed = 0
+								if type(infos) == "table" and #infos >= 1 then
+									changed = infos[1].changed
+								end
+								if changed == 1 then
+									vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+
+									vim.lsp.buf.format({
+										async = true,
+										filter = function(c)
+											return c.name == "null-ls"
+												or c.name == "neo-tree"
+												or c.name == "kulala://ui"
+										end,
+									})
+								end
 							end,
 						})
 					end

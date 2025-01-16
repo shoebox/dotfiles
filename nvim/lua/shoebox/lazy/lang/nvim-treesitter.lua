@@ -3,16 +3,17 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.install").compilers = {
-				"gcc-11",
-				"gcc",
-				"clang",
-			}
+			-- require("nvim-treesitter.install").compilers = {
+			-- 	"gcc-11",
+			-- 	"gcc",
+			-- 	"clang",
+			-- }
 			require("nvim-treesitter.configs").setup({
 				auto_install = true,
 				highlight = {
 					enable = true,
 				},
+				indent = { enable = true },
 				incremental_selection = {
 					enable = true,
 					keymaps = {
@@ -34,6 +35,9 @@ return {
 				filetype = "d2",
 			}
 		end,
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter-textobjects",
+		},
 		event = { "BufReadPre", "BufNewFile" },
 	},
 	{
@@ -67,12 +71,12 @@ return {
 		end,
 	},
 	{
-		"cathaysia/tree-sitter-loongdoc",
+		"cathaysia/tree-sitter-asciidoc",
 		config = function()
 			vim.filetype.add({
 				extension = {
-					adoc = "loongdoc",
-					asciidoc = "loongdoc",
+					adoc = "asciidoc",
+					asciidoc = "asciidoc",
 				},
 			})
 

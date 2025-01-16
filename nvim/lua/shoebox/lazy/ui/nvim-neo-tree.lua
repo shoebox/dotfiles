@@ -22,7 +22,13 @@ return {
 						enabled = true,
 						leave_dirs_open = false,
 					},
-					filtered_items = { hide_gitignored = git_available },
+					filtered_items = {
+						hide_gitignored = git_available,
+						never_show = {
+							".DS_Store",
+							"thumbs.db",
+						},
+					},
 				},
 				window = {
 					mappings = {
@@ -37,16 +43,7 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-tree/nvim-web-devicons",
 			"MunifTanjim/nui.nvim",
-			{
-				"s1n7ax/nvim-window-picker",
-				event = "VeryLazy",
-				config = function()
-					require("window-picker").setup({
-						hint = "floating-big-letter",
-						selection_chars = "ABCDEF",
-					})
-				end,
-			},
+			"s1n7ax/nvim-window-picker",
 		},
 		keys = {
 			{

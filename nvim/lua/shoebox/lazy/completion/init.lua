@@ -1,3 +1,4 @@
+local vim = vim
 return {
 	{
 		"hrsh7th/nvim-cmp",
@@ -8,19 +9,72 @@ return {
 				completion = {
 					autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
 					completeopt = "menu,menuone,noselect",
+					col_offset = -3,
+					side_padding = 0,
 				},
 				formatting = {
+					fields = { "kind", "abbr", "menu" },
 					format = function(entry, vim_item)
-						vim_item.kind = string.format("%s %s", icons.get("lsp", vim_item.kind:lower()), vim_item.kind)
+						local kind = require("lspkind").cmp_format({
+							mode = "symbol_text",
+							maxwidth = 100,
+						})(entry, vim_item)
 
-						vim_item.menu = ({
-							buffer = "[Buffer]",
-							nvim_lsp = "",
-							luasnip = "[LuaSnip]",
-							nvim_lua = "[Lua]",
-						})[entry.source.name]
+						local strings = vim.split(kind.kind, "%s", { trimempty = true })
 
-						return vim_item
+						kind.kind = " " .. (strings[1] or "") .. " "
+						kind.menu = "    (" .. (strings[2] or "") .. ")"
+
+						local colorize = function(group, hl, revert)
+							revert = revert or true
+							local fn = vim.fn
+							local bg = fn.synIDattr(fn.synIDtrans(fn.hlID(hl)), "bg#")
+							local fg = fn.synIDattr(fn.synIDtrans(fn.hlID(hl)), "fg#")
+
+							vim.api.nvim_set_hl(0, group, {
+								fg = revert and bg or fg,
+								bg = revert and fg or bg,
+							})
+						end
+
+						colorize("CmpItemKindField", "@variable.member")
+						colorize("CmpItemKindProperty", "@property")
+						colorize("CmpItemKindEvent", "@constant")
+
+						colorize("CmpItemKindText", "@property")
+						colorize("CmpItemKindEnum", "@variable.member")
+						colorize("CmpItemKindKeyword", "@keyword")
+
+						colorize("CmpItemKindConstant", "@constant")
+						colorize("CmpItemKindConstructor", "@type")
+						colorize("CmpItemKindReference", "@variable.parameter.reference")
+
+						colorize("CmpItemKindFunction", "@function")
+						colorize("CmpItemKindStruct", "@constant")
+						colorize("CmpItemKindClass", "@type")
+						colorize("CmpItemKindModule", "@module")
+						colorize("CmpItemKindOperator", "@operator")
+
+						colorize("CmpItemKindVariable", "@variable")
+						colorize("CmpItemKindFile", "@variable")
+
+						colorize("CmpItemKindUnit", "@constant")
+						colorize("CmpItemKindSnippet", "@constant")
+						colorize("CmpItemKindFolder", "@constant")
+
+						colorize("CmpItemKindMethod", "@function.method")
+						colorize("CmpItemKindEnumMember", "@variable.member")
+						colorize("CmpItemKindValue", "@variable.member")
+
+						colorize("CmpItemKindInterface", "@type")
+						colorize("CmpItemKindColor", "DevIconCss")
+						colorize("CmpItemKindTypeParameter", "@variable.parameter")
+
+						colorize("CmpItemKindSnippet", "@constant")
+
+						colorize("CmpItemKindFile", "TSURI")
+
+						return kind
 					end,
 				},
 				mapping = {
@@ -40,16 +94,22 @@ return {
 					{ name = "path" },
 					{ name = "buffer" },
 				},
+				window = {
+					completion = {
+						col_offset = 0,
+						side_padding = 0,
+					},
+				},
 			})
 		end,
 		dependencies = {
 			"echasnovski/mini.nvim",
 			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-emoji",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
 			"neovim/nvim-lspconfig",
-			"rafamadriz/friendly-snippets",
+			{ "onsails/lspkind.nvim", lazy = true },
+			{ "rafamadriz/friendly-snippets", lazy = true },
 			{
 				"windwp/nvim-autopairs",
 				event = "InsertEnter",
@@ -60,11 +120,6 @@ return {
 			},
 			{
 				"f3fora/cmp-spell",
-				lazy = true,
-				ft = { "asciidoc", "markdown" },
-			},
-			{
-				"hrsh7th/cmp-emoji",
 				lazy = true,
 				ft = { "asciidoc", "markdown" },
 			},

@@ -19,14 +19,19 @@ return {
 						normal_hl = "Identifier",
 						align = "bottom",
 						winblend = 0,
-						x_padding = 2,
-						y_padding = 2,
+						-- x_padding = 2,
+						y_padding = 1,
 					},
 				},
 
 				progress = {
 					ignore_empty_message = true,
-					ignore = {
+					ignore = {},
+					display = {
+						done_ttl = 1,
+						done_style = "comment",
+						group_style = "comment",
+						progress_style = "comment",
 					},
 				},
 			})

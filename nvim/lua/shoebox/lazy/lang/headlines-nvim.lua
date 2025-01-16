@@ -42,5 +42,6 @@ return {
 			})
 		end,
 		event = "VeryLazy",
+		ft = { "asciidoc", "adoc", "loongdoc" },
 	},
 }
