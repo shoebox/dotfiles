@@ -1,10 +1,10 @@
 {pkgs, ...}: let
   docpkgs = with pkgs; [
-    antora
+    # antora
     asciidoctor
     d2
     rubyPackages_3_3.rouge
-    vale
+    # vale
   ];
 in
   docpkgs

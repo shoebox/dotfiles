@@ -2,9 +2,9 @@
   networkingpkgs = with pkgs; [
     curl
     gcc
-    google-cloud-sdk
+    # google-cloud-sdk
     jq
-    nginx
+    # nginx
     # terraform
     wget
   ];

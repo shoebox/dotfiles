@@ -2,6 +2,7 @@
   bashpkgs = with pkgs; [
     atuin
     bat
+    chafa
     eza
     jump
     zimfw

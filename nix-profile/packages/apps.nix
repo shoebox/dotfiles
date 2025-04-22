@@ -1,9 +1,18 @@
-{pkgs ? import <nixpkgs> {}}: let
+{ pkgs ? import <nixpkgs> { }
+,
+}:
+let
   apppkgs = with pkgs; [
-    act
-    hadolint
-    slack
-    spotify
+    actionlint
+    # act
+    # asciinema
+    # asciinema-agg
+    # localstack
+    # spotify
+    dive
+    duc
+    pinentry_mac
+    # scrcpy
   ];
 in
-  apppkgs
+apppkgs
