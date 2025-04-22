@@ -1,10 +1,12 @@
 return {
-	{
-		"lewis6991/gitsigns.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("gitsigns").setup({})
-		end,
-		dependencies = { "nvim-lua/plenary.nvim" },
-	},
+  {
+    "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("gitsigns").setup({})
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
 }

@@ -1,6 +1,6 @@
 return {
-	{
-		"vim-scripts/haproxy",
-		ft = "haproxy",
-	},
+  {
+    "vim-scripts/haproxy",
+    ft = "haproxy",
+  },
 }

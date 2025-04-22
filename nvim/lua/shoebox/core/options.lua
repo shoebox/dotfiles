@@ -5,6 +5,7 @@ vim.cmd([[
     set autowrite    " Write when switching buffers
     set autowriteall " Write on :quit
 	set scl=auto
+set termguicolors
 ]])
 
 vim.opt.autoread = true
