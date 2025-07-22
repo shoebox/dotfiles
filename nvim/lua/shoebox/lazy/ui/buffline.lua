@@ -3,6 +3,7 @@ return {
     "akinsho/bufferline.nvim",
     opts = {
       options = {
+        diagnostics = false,
         mode = "tabs",
         numbers = "ordinal",
         offsets = {
@@ -16,7 +17,6 @@ return {
         show_buffer_close_icons = false,
         show_buffer_icons = false,
         themable = true,
-        diagnostics = "nvim_lsp",
       },
     },
     keys = {

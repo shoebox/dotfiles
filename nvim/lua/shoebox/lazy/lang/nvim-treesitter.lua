@@ -4,14 +4,19 @@ return {
     build = ":TSUpdate",
     config = function()
       require("nvim-treesitter.configs").setup({
-        ensure_installed = { "asciidoc" },
         auto_install = true,
+        ensure_installed = {
+          "asciidoc",
+          "go",
+        },
         highlight = {
           enable = true,
+          custom_captures = { todo = "Todo" },
+          use_languagetree = true,
         },
         indent = { enable = true },
         incremental_selection = {
-          enable = true,
+          enable = false,
           keymaps = {
             init_selection = "<C-space>",
             node_incremental = "<C-space>",
@@ -20,16 +25,6 @@ return {
           },
         },
       })
-
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.d2 = {
-        install_info = {
-          url = "https://github.com/pleshevskiy/tree-sitter-d2",
-          revision = "main",
-          files = { "src/parser.c", "src/scanner.cc" },
-        },
-        filetype = "d2",
-      }
     end,
     event = { "BufReadPre", "BufNewFile" },
   },
@@ -37,10 +32,6 @@ return {
     "cathaysia/tree-sitter-asciidoc",
     after = "nvim-treesitter/nvim-treesitter",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { "asciidoc" }, -- Ensure the Asciidoc parser is installed
-      })
-
       local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
       parser_config.asciidoc = {
         install_info = {

@@ -14,13 +14,6 @@ local global_nav = {
   ["v|<space><Down>"] = map_cmd("<C-W>j"),
 }
 
-local global_git = {
-  ["n|g/"] = map_cr("G add % | G diff --staged | G commit"):with_noremap():with_silent(),
-  ["n|gP"] = map_cr("G push"):with_noremap():with_silent(),
-  ["v|gP"] = map_cr("G push"):with_noremap():with_silent(),
-  ["t|gP"] = map_cr("G push"):with_noremap():with_silent(),
-}
-
 vim.keymap.set({ "n", "x" }, "<c-s>", "<cmd>w<CR>")
 
 local nb = function()
@@ -52,8 +45,19 @@ local clipboard = function()
   end, opts)
 end
 
-bind.nvim_load_mapping(global_git)
 bind.nvim_load_mapping(global_nav)
+
+local git = function()
+  local opts = { noremap = true, silent = true }
+  vim.keymap.set("n", "gga", function()
+    vim.cmd("Git add %")
+    vim.notify("Added file to git staging area!", vim.log.levels.INFO, { title = "Git" })
+  end, opts)
+  vim.keymap.set("n", "ggc", function()
+    vim.cmd("Git commit")
+  end, opts)
+end
 
 nb()
 clipboard()
+git()

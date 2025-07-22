@@ -64,7 +64,9 @@ return {
     },
     event = "BufReadPre",
     opts = {
-      diagnostics = { virtual_text = { prefix = "icons" } },
+      diagnostics = {
+        virtual_text = { prefix = "icons" },
+      },
       capabilities = {
         workspace = {
           didChangeWatchedFiles = {
@@ -78,8 +80,30 @@ return {
       },
     },
     config = function()
-      require("lspconfig").gopls.setup({})
-      require("lspconfig").lua_ls.setup({})
+      local cfg = require("lspconfig")
+      cfg.gopls.setup({
+        settings = {
+          gopls = {
+            analyses = {
+              shadow = true,
+              unusedwrite = true,
+              unusedvariable = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = false,
+              functionTypeParameters = false,
+              parameterNames = false,
+              rangeVariableTypes = false,
+            },
+          },
+        },
+      })
+      cfg.lua_ls.setup({})
     end,
     init = function()
       createAuGroup()

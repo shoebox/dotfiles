@@ -3,18 +3,44 @@ return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
     config = function()
-      local telescope = require("telescope")
-      telescope.setup({
+      local actions = require("telescope.actions")
+      require("telescope").setup({
+        defaults = {
+          layout_strategy = "vertical",
+          layout_config = {
+            vertical = { width = 0.65 },
+          },
+          mappings = {
+            i = {
+              ["<esc>"] = actions.close,
+            },
+          },
+          sorting_strategy = "ascending",
+        },
         extensions = {
           ["ui-select"] = {
             require("telescope.themes").get_dropdown({}),
           },
         },
+        layout_strategy = "vertical",
         pickers = {
           find_files = {
             hidden = true,
           },
         },
+      })
+
+      -- tweak Telescope colors
+      local vim = vim or {}
+      local comment_conf = vim.api.nvim_get_hl(0, { name = "Comment" })
+      local normal = vim.api.nvim_get_hl(0, { name = "Normal" })
+      vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = comment_conf.fg })
+      vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = comment_conf.fg })
+      vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = comment_conf.fg })
+      vim.api.nvim_set_hl(0, "TelescopeTitle", {
+        bg = comment_conf.fg,
+        fg = normal.fg,
+        bold = true,
       })
     end,
     keys = {
@@ -45,6 +71,15 @@ return {
           require("telescope.builtin").quickfix()
         end,
         desc = "Telescope - quickfix",
+      },
+      {
+        "<leader>fm",
+        function()
+          require("telescope.builtin").lsp_document_symbols({
+            symbols = { "method", "function" },
+          })
+        end,
+        desc = "Telescope - Document symbols",
       },
     },
     dependencies = {

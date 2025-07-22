@@ -1,7 +1,9 @@
+local vim = vim or {}
+
 return {
   {
     "mfussenegger/nvim-lint",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "BufWritePost", "BufReadPre", "BufNewFile" },
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
@@ -14,7 +16,7 @@ return {
       }
       lint.linters_by_ft["yaml.githubworkflow"] = { "actionlint" }
 
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+      vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
         callback = function()
           lint.try_lint()
         end,

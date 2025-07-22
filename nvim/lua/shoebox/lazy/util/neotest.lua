@@ -5,7 +5,7 @@ return {
     "nvim-neotest/neotest",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-neotest/neotest-go",
+      "fredrikaverpil/neotest-golang",
       "nvim-treesitter/nvim-treesitter",
       "nvim-neotest/nvim-nio",
     },
@@ -21,10 +21,31 @@ return {
           end,
         },
       }, neotest_ns)
+
       local neotest = require("neotest")
+      -- Golang
       neotest.setup({
         adapters = {
-          require("neotest-go"),
+          require("neotest-golang")({
+            testify_enabled = true,
+          }),
+        },
+        icons = {
+          running = "⬜",
+          passed = "🟩",
+          failed = "🟥",
+          skipped = "🟨",
+          unknown = "⬜",
+        },
+        output_panel = {
+          enabled = true,
+          open = "botright split | resize 10 | vertical resize 80",
+        },
+        status = {
+          signs = true,
+        },
+        summary = {
+          animated = false,
         },
       })
     end,

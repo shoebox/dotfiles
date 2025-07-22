@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
     if not vim.bo[args.buf].readonly then
       local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
       local modifiable = vim.api.nvim_get_option_value("modifiable", { buf = args.buf })
-      local ignore_buffername = { "", " " }
+      local ignore_buffername = { "", " ", "nofile" }
 
       if modifiable and not vim.tbl_contains(ignore_buftype, buftype) then
         local bufferName = vim.api.nvim_buf_get_name(0)
@@ -110,4 +110,22 @@ vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
     end
   end,
   pattern = { "*" },
+})
+
+-- show cursor line only in active window
+vim.api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
+  callback = function()
+    if vim.w.auto_cursorline then
+      vim.wo.cursorline = true
+      vim.w.auto_cursorline = nil
+    end
+  end,
+})
+vim.api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
+  callback = function()
+    if vim.wo.cursorline then
+      vim.w.auto_cursorline = true
+      vim.wo.cursorline = false
+    end
+  end,
 })

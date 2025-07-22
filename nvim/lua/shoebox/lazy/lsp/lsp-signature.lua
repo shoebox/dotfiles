@@ -7,12 +7,13 @@ return {
         bind = true,
         close_timeout = 200,
         handler_opts = {
-          border = "rounded",
+          border = "none",
         },
         hint_enable = true,
-        max_height = 10,
+        max_height = 30,
       })
     end,
+    enabled = false,
     event = "VimEnter",
   },
 }

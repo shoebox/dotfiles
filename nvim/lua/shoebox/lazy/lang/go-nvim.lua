@@ -6,17 +6,40 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "ray-x/guihua.lua",
     },
-    config = function()
-      require("go").setup({
-        lsp_document_formatting = false,
-        lsp_cfg = false,
-        lsp_diag_update_in_insert = false,
-        lsp_inlay_hints = {
-          enable = false,
-        },
-      })
-    end,
-    ft = { "go", "gomod" },
+    opts = {
+      lsp_document_formatting = false,
+      lsp_cfg = false,
+      lsp_diag_update_in_insert = false,
+      lsp_inlay_hints = {
+        enable = false,
+      },
+      dap_debug_vt = true,
+      dap_debug_gui = true,
+      diagnostic = false,
+      lsp_semantic_highlights = true,
+    },
+    cmd = {
+      "Go",
+      "GoModInit",
+      "GoModTidy",
+      "GoNew",
+      "GoFmt",
+      "GoBuild",
+      "GoAlt",
+      "GoBreakToggle",
+      "GoImpl",
+      "GoRun",
+      "GoInstall",
+      "GoTest",
+      "GoTestFunc",
+      "GoTestCompile",
+      "GoCoverage",
+      "GoCoverageToggle",
+      "GoCoverag",
+      "GoGet",
+      "GoModifyTags",
+    },
+    ft = { "go", "gomod", "gosum", "gotmpl", "gohtmltmpl", "gotexttmpl" },
     keys = {
       {
         "<leader>ga",

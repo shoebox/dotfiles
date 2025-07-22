@@ -44,12 +44,12 @@ return {
         },
       })
 
-      -- vim.cmd([[
-      --           highlight lualine_b_inactive guibg=NONE
-      --           highlight lualine_c_inactive guibg=NONE
-      --
-      --           highlight lualine_c_normal guibg=NONE
-      --       ]])
+      vim.cmd([[
+                highlight lualine_b_inactive guibg=NONE
+                highlight lualine_c_inactive guibg=NONE
+
+                highlight lualine_c_normal guibg=NONE
+            ]])
     end,
     event = "VeryLazy",
   },

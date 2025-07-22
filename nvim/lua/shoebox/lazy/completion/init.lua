@@ -1,78 +1,10 @@
 local vim = vim
 
-local colorizeCmpItem = function(group, hl, revert)
-  revert = revert or true
-  local fn = vim.fn
-  local bg = fn.synIDattr(fn.synIDtrans(fn.hlID(hl)), "bg#")
-  local fg = fn.synIDattr(fn.synIDtrans(fn.hlID(hl)), "fg#")
-
-  vim.api.nvim_set_hl(0, group, {
-    fg = revert and bg or fg,
-    bg = revert and fg or bg,
-  })
-end
-
-local function colorizeCmpItems()
-  colorizeCmpItem("CmpItemKindField", "@variable.member")
-  colorizeCmpItem("CmpItemKindProperty", "@property")
-  colorizeCmpItem("CmpItemKindEvent", "@constant")
-
-  colorizeCmpItem("CmpItemKindText", "@property")
-  colorizeCmpItem("CmpItemKindEnum", "@variable.member")
-  colorizeCmpItem("CmpItemKindKeyword", "@keyword")
-
-  colorizeCmpItem("CmpItemKindConstant", "@constant")
-  colorizeCmpItem("CmpItemKindConstructor", "@type")
-  colorizeCmpItem("CmpItemKindReference", "@variable.parameter.reference")
-
-  colorizeCmpItem("CmpItemKindFunction", "@function")
-  colorizeCmpItem("CmpItemKindStruct", "@constant")
-  colorizeCmpItem("CmpItemKindClass", "@type")
-  colorizeCmpItem("CmpItemKindModule", "@module")
-  colorizeCmpItem("CmpItemKindOperator", "@operator")
-
-  colorizeCmpItem("CmpItemKindVariable", "@variable")
-  colorizeCmpItem("CmpItemKindFile", "@variable")
-
-  colorizeCmpItem("CmpItemKindUnit", "@constant")
-  colorizeCmpItem("CmpItemKindSnippet", "@constant")
-  colorizeCmpItem("CmpItemKindFolder", "@constant")
-
-  colorizeCmpItem("CmpItemKindMethod", "@function.method")
-  colorizeCmpItem("CmpItemKindEnumMember", "@variable.member")
-  colorizeCmpItem("CmpItemKindValue", "@variable.member")
-
-  colorizeCmpItem("CmpItemKindInterface", "@type")
-  colorizeCmpItem("CmpItemKindColor", "DevIconCss")
-  colorizeCmpItem("CmpItemKindTypeParameter", "@variable.parameter")
-
-  colorizeCmpItem("CmpItemKindSnippet", "@constant")
-
-  colorizeCmpItem("CmpItemKindFile", "TSURI")
-end
-
 return {
   {
     "saghen/blink.cmp",
     event = "InsertEnter",
     version = "1.*",
-    init = function()
-      -- hide copilot suggestion when BlinkCmp menu is open
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuOpen",
-        callback = function()
-          require("copilot.suggestion").dismiss()
-          vim.b.copilot_suggestion_hidden = true
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuClose",
-        callback = function()
-          vim.b.copilot_suggestion_hidden = false
-        end,
-      })
-    end,
     opts = {
       enabled = function()
         return vim.bo.buftype ~= "prompt" and vim.bo.buftype ~= "nofile"
@@ -91,13 +23,22 @@ return {
         },
         implementation = "prefer_rust_with_warning",
       },
+      signature = {
+        enabled = true,
+        trigger = {
+          enabled = true,
+        },
+      },
       completion = {
         ghost_text = {
           enabled = false,
         },
         documentation = {
           auto_show = true,
-          auto_show_delay_ms = 1000,
+          auto_show_delay_ms = 100,
+          window = {
+            border = "none",
+          },
         },
         list = {
           selection = {

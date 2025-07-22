@@ -1,16 +1,22 @@
 return {
   {
     "mistweaverco/kulala.nvim",
-    config = function()
+    setup = function()
       vim.filetype.add({
         extension = {
           http = "http",
         },
       })
-
-      -- Setup is required, even if you don't pass any options
-      require("kulala").setup()
     end,
+    opts = {
+      ui = {
+        display_mode = "float",
+        report = {
+          show_script_output = "on_error",
+          show_summary = false,
+        },
+      },
+    },
     ft = { "http", "rest" },
     keys = {
       {
@@ -18,7 +24,15 @@ return {
         function()
           require("kulala").run()
         end,
+        ft = "http",
         desc = "Kulala run request",
+      },
+      {
+        "<leader>ka",
+        function()
+          require("kulala").replay()
+        end,
+        desc = "Kulala replay last request",
       },
       {
         "kt",
@@ -29,5 +43,4 @@ return {
       },
     },
   },
-
 }

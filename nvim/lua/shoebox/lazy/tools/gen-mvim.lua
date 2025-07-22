@@ -281,6 +281,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
     },
+    enabled = false,
     cmd = "Gen",
     config = function()
       local gen = require("gen")

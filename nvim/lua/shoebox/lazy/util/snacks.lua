@@ -4,7 +4,12 @@ return {
     "folke/snacks.nvim",
     event = "VimEnter",
     opts = {
-      lazygit = {},
+      lazygit = {
+        theme = {
+          activeBorderColor = { fg = "Constant", bold = true },
+          inactiveBorderColor = { fg = "Comment", bold = true },
+        },
+      },
       scratch = { height = 50 },
     },
     keys = {
