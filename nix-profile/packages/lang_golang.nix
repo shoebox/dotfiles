@@ -1,7 +1,9 @@
-{pkgs, ...}: let
+{ pkgs, ... }:
+let
   langGolang = with pkgs; [
     air
     delve
+    go
     gofumpt
     goimports-reviser
     golines
@@ -10,4 +12,4 @@
     gotestsum
   ];
 in
-  langGolang
+langGolang

@@ -1,5 +1,5 @@
-{
-  pkgs ? import <nixpkgs> { },
+{ pkgs ? import <nixpkgs> { }
+,
 }:
 let
   basePkgs = with pkgs; [
@@ -7,7 +7,6 @@ let
     direnv
     neovim
     ripgrep
-    bruno
     difftastic
     fzf
     libgccjit
@@ -23,13 +22,12 @@ let
     lazygit
     nb
     neofetch
-    oterm
     rectangle
     # sqlfluff
     yazi
 
-    imagemagick
-    luajitPackages.magick
+    # imagemagick
+    # luajitPackages.magick
   ];
 in
 basePkgs

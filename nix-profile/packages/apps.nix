@@ -11,6 +11,7 @@ let
     # spotify
     dive
     duc
+    hugo
     pinentry_mac
     # scrcpy
   ];
